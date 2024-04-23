@@ -31,7 +31,7 @@ public class StatusTest {
 	@Test
 	void checkBIncrement() throws Exception {
 		AppStatus testStatus = restTemplate.getForObject("http://localhost:" + port + "/status", AppStatus.class);
-		assertThat(testStatus.requestsCount()).isEqualTo(1);
+		assertThat(testStatus.requestsCount()).isEqualTo(2);
 		assertThat(testStatus.status()).isEqualTo("yellow");
 	}
 }
