@@ -1,0 +1,5 @@
+DROP TABLE IF EXISTS deposits;
+
+CREATE TABLE deposits(id INT AUTO_INCREMENT PRIMARY KEY, duration INT);
+
+INSERT INTO deposits (duration) VALUES (365);
