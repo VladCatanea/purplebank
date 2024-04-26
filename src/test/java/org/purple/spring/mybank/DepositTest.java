@@ -27,7 +27,20 @@ public class DepositTest {
 		ResponseEntity<Deposit[]> responseEntity = restTemplate.getForEntity("/deposits", Deposit[].class);
 		Deposit[] depositArray = responseEntity.getBody();
 		assertThat(depositArray[0].getDuration()).isEqualTo(365L);
+	}
 	
+	@Test
+	void checkCreate() throws Exception {
+		Deposit deposit = new Deposit(100L, "RON");
+		ResponseEntity<Deposit> responseEntityConfirm = restTemplate.postForEntity("/deposits", deposit, Deposit.class);
+		deposit = responseEntityConfirm.getBody();
+		ResponseEntity<Deposit[]> responseEntity = restTemplate.getForEntity("/deposits", Deposit[].class);
+		Deposit[] depositArray = responseEntity.getBody();
+//		System.out.println(deposit);
+//		for(Deposit d : depositArray) {
+//			System.out.println(d);
+//		}
+		assertThat(depositArray).contains(deposit);
 	}
 	
 	
