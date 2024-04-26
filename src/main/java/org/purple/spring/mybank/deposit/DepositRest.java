@@ -22,7 +22,7 @@ public class DepositRest {
 
 	@PostMapping(value = "/createDeposit", consumes = "application/json", produces = "application/json")
 	public String createDeposit(@RequestBody Deposit deposit) {
-		
+		repository.save(deposit);
 		return "ok";
 	}
 

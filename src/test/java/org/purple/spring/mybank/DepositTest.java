@@ -2,11 +2,12 @@ package org.purple.spring.mybank;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
 
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.purple.spring.mybank.status.AppStatus;
+import org.purple.spring.mybank.deposit.Deposit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -15,7 +16,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 
 @TestMethodOrder(MethodOrderer.MethodName.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-public class StatusTest {
+public class DepositTest {
 	@LocalServerPort
 	private int port;
 
@@ -23,17 +24,9 @@ public class StatusTest {
 	private TestRestTemplate restTemplate;
 
 	@Test
-	void checkAStatus() throws Exception {
-		AppStatus testStatus = restTemplate.getForObject("http://localhost:" + port + "/status", AppStatus.class);
-		assertThat(testStatus.requestsCount()).isEqualTo(1);
-		assertThat(testStatus.status()).isEqualTo("yellow");
-	}
-	
-	@Test
-	void checkBIncrement() throws Exception {
-		AppStatus testStatus = restTemplate.getForObject("http://localhost:" + port + "/status", AppStatus.class);
-		assertThat(testStatus.requestsCount()).isEqualTo(2);
-		assertThat(testStatus.status()).isEqualTo("yellow");
+	void checkRead() throws Exception {
+		List<Deposit> testDepositList = restTemplate.getForObject("http://localhost:" + port + "/deposits", List.class);
+		assertThat(testDepositList.get(0).getDuration()).isEqualTo(365L);
 	}
 	
 
