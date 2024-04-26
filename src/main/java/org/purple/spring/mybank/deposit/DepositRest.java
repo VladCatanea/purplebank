@@ -15,15 +15,14 @@ public class DepositRest {
 		this.repository = repository;
 	}
 	
-	@GetMapping("/deposits")
+	@GetMapping(value = "/deposits", produces = "application/json")
 	public List<Deposit> getDeposits() {
 		return repository.findAll();
 	}
 
-	@PostMapping(value = "/createDeposit", consumes = "application/json", produces = "application/json")
-	public String createDeposit(@RequestBody Deposit deposit) {
-		repository.save(deposit);
-		return "ok";
+	@PostMapping(value = "/deposits", consumes = "application/json", produces = "application/json")
+	public Deposit createDeposit(@RequestBody Deposit deposit) {
+		return repository.save(deposit);
 	}
 
 }
