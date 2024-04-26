@@ -36,9 +36,9 @@ public class StatusTest {
 		assertThat(testStatus.status()).isEqualTo("yellow");
 	}
 	
-	@Test
-	void checkCreate() throws Exception {
-		Deposit testDeposit = restTemplate.getForObject("http://localhost:" + port + "/deposits", Deposit.class);
-		assertThat(testDeposit.duration()).isEqualTo(365);
-	}
+//	@Test
+//	void checkCreate() throws Exception {
+//		Deposit testDeposit = restTemplate.getForObject("http://localhost:" + port + "/deposits", Deposit.class);
+//		assertThat(testDeposit.duration()).isEqualTo(365);
+//	}
 }

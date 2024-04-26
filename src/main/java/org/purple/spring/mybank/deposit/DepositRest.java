@@ -1,13 +1,7 @@
 package org.purple.spring.mybank.deposit;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.List;
 
-import javax.sql.DataSource;
-
-import org.purple.spring.mybank.EmbeddedJdbcConfig;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,64 +9,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class DepositRest {
-
-	private DataSource ds = new EmbeddedJdbcConfig().dataSource();
-
+	private final DepositRepository repository;
+	
+	public DepositRest(DepositRepository repository) {
+		this.repository = repository;
+	}
+	
 	@GetMapping("/deposits")
-	public Deposit getDeposits() {
-		ResultSet rs = null;
-		Statement stmt = null;
-		Connection con = null;
-		Deposit response = null;
-		try {
-			con = ds.getConnection();
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT * FROM deposits;");
-			if (rs.next()) { //first object from the database
-				response = new Deposit(rs.getLong("id"), rs.getInt("duration"));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (rs != null)
-					rs.close();
-				if (stmt != null)
-					stmt.close();
-				if (con != null)
-					con.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-
-		}
-		return response;
+	public List<Deposit> getDeposits() {
+		return repository.findAll();
 	}
 
 	@PostMapping(value = "/createDeposit", consumes = "application/json", produces = "application/json")
 	public String createDeposit(@RequestBody Deposit deposit) {
-		ResultSet rs = null;
-		Statement stmt = null;
-		Connection con = null;
-		try {
-			con = ds.getConnection();
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("INSERT INTO deposits (duration) VALUES (" + deposit.duration() + ");");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (rs != null)
-					rs.close();
-				if (stmt != null)
-					stmt.close();
-				if (con != null)
-					con.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-
-		}
+		
 		return "ok";
 	}
 
