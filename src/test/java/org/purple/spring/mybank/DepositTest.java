@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @TestMethodOrder(MethodOrderer.MethodName.class)
@@ -41,8 +42,38 @@ public class DepositTest {
 //			System.out.println(d);
 //		}
 		assertThat(depositArray).contains(deposit);
+		assertThat(responseEntityConfirm.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 	}
 	
+	@Test
+	void checkUpdate() throws Exception {
+		Deposit deposit = new Deposit(200L, "RON");
+		ResponseEntity<Deposit> responseEntityConfirm = restTemplate.postForEntity("/deposits", deposit, Deposit.class);
+		deposit = responseEntityConfirm.getBody();
+		deposit.setCurrency("GBP");
+		Long id = deposit.getId();
+		restTemplate.put("/deposits/" + id, deposit);
+		
+		ResponseEntity<Deposit[]> responseEntity = restTemplate.getForEntity("/deposits", Deposit[].class);
+		Deposit[] depositArray = responseEntity.getBody();
+		
+		assertThat(depositArray).contains(deposit);
+	}
+	
+	@Test
+	void checkDelete() throws Exception {
+		Deposit deposit = new Deposit(300L, "RON");
+		ResponseEntity<Deposit> responseEntityConfirm = restTemplate.postForEntity("/deposits", deposit, Deposit.class);
+		deposit = responseEntityConfirm.getBody();
+		
+		Long id = deposit.getId();
+		restTemplate.delete("/deposits/" + id);
+		
+		ResponseEntity<Deposit[]> responseEntity = restTemplate.getForEntity("/deposits", Deposit[].class);
+		Deposit[] depositArray = responseEntity.getBody();
+		
+		assertThat(depositArray).doesNotContain(deposit);
+	}
 	
 
 }
