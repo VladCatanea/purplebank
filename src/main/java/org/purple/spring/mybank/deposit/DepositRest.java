@@ -21,23 +21,20 @@ public class DepositRest {
 	}
 
 	@GetMapping(value = "/deposits", produces = "application/json")
-	public List<Deposit> getDeposits() {
-		return repository.findAll();
+	public ResponseEntity<List<Deposit>> listDeposits() {
+		return new ResponseEntity<>(repository.findAll(), HttpStatus.FOUND);
 	}
-	
-	  @GetMapping("/deposits/{id}")
-	  ResponseEntity<Deposit> one(@PathVariable Long id) {
-	    try {
-	    Deposit deposit = repository.findById(id)
-	      .orElseThrow(() -> new DepositNotFoundException(id));
-	    return new ResponseEntity<>(deposit, HttpStatus.FOUND);
-	    }
-	    catch(Exception DepositNotFoundException){
-	    	return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-	    }
-	  }
 
-	
+	@GetMapping("/deposits/{id}")
+	public ResponseEntity<Deposit> getDeposit(@PathVariable Long id) {
+		try {
+			Deposit deposit = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
+			return new ResponseEntity<>(deposit, HttpStatus.FOUND);
+		} catch (Exception DepositNotFoundException) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+	}
+
 	@PostMapping(value = "/deposits", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<Long> createDeposit(@RequestBody Deposit deposit) {
 		deposit = repository.save(deposit);
@@ -45,7 +42,7 @@ public class DepositRest {
 	}
 
 	@PutMapping(value = "/deposits/{id}", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<Deposit> updateDeposit(@RequestBody Deposit newDeposit, @PathVariable Long id) {
+	public ResponseEntity<Void> updateDeposit(@RequestBody Deposit newDeposit, @PathVariable Long id) {
 		repository.findById(id).map(deposit -> {
 			deposit.setDuration(newDeposit.getDuration());
 			deposit.setCurrency(newDeposit.getCurrency());
@@ -56,9 +53,9 @@ public class DepositRest {
 		});
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
-	
+
 	@DeleteMapping(value = "deposits/{id}")
-	public ResponseEntity<Deposit> deleteDeposit(@PathVariable Long id){
+	public ResponseEntity<Void> deleteDeposit(@PathVariable Long id) {
 		repository.deleteById(id);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

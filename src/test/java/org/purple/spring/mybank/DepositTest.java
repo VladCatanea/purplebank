@@ -29,14 +29,14 @@ public class DepositTest {
 		Deposit[] depositArray = responseEntity.getBody();
 		assertThat(depositArray[0].getDuration()).isEqualTo(365L);
 	}
-	
+
 	@Test
 	void checkReadOne() throws Exception {
 		ResponseEntity<Deposit> responseEntity = restTemplate.getForEntity("/deposits/1", Deposit.class);
 		Deposit deposit = responseEntity.getBody();
 		assertThat(deposit.getDuration()).isEqualTo(365L);
 	}
-	
+
 	@Test
 	void checkCreate() throws Exception {
 		Deposit deposit = new Deposit(100L, "RON");
@@ -48,7 +48,7 @@ public class DepositTest {
 		assertThat(newDeposit).isEqualTo(deposit);
 		assertThat(responseEntityConfirm.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 	}
-	
+
 	@Test
 	void checkUpdate() throws Exception {
 		Deposit deposit = new Deposit(200L, "RON");
@@ -57,26 +57,25 @@ public class DepositTest {
 		deposit.setCurrency("GBP");
 		deposit.setId(id);
 		restTemplate.put("/deposits/" + id, deposit);
-		
+
 		ResponseEntity<Deposit> responseEntity = restTemplate.getForEntity("/deposits/" + id, Deposit.class);
 		Deposit newDeposit = responseEntity.getBody();
-		
+
 		assertThat(newDeposit.getCurrency()).isEqualTo("GBP");
 	}
-	
+
 	@Test
 	void checkDelete() throws Exception {
 		Deposit deposit = new Deposit(300L, "RON");
 		ResponseEntity<Long> responseEntityConfirm = restTemplate.postForEntity("/deposits", deposit, Long.class);
 		Long id = responseEntityConfirm.getBody();
-		
+
 		restTemplate.delete("/deposits/" + id);
-		
+
 		ResponseEntity<Deposit> responseEntity = restTemplate.getForEntity("/deposits/" + id, Deposit.class);
 //		Deposit deposit = responseEntity.getBody();
 //		System.out.println(responseEntity.getStatusCode());
 		assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 	}
-	
 
 }
