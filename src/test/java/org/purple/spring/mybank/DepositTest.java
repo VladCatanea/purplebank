@@ -73,8 +73,6 @@ public class DepositTest {
 		restTemplate.delete("/deposits/" + id);
 
 		ResponseEntity<Deposit> responseEntity = restTemplate.getForEntity("/deposits/" + id, Deposit.class);
-//		Deposit deposit = responseEntity.getBody();
-//		System.out.println(responseEntity.getStatusCode());
 		assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 	}
 
