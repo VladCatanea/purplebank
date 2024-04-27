@@ -24,11 +24,24 @@ public class DepositRest {
 	public List<Deposit> getDeposits() {
 		return repository.findAll();
 	}
+	
+	  @GetMapping("/deposits/{id}")
+	  ResponseEntity<Deposit> one(@PathVariable Long id) {
+	    try {
+	    Deposit deposit = repository.findById(id)
+	      .orElseThrow(() -> new DepositNotFoundException(id));
+	    return new ResponseEntity<>(deposit, HttpStatus.FOUND);
+	    }
+	    catch(Exception DepositNotFoundException){
+	    	return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+	    }
+	  }
 
+	
 	@PostMapping(value = "/deposits", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<Deposit> createDeposit(@RequestBody Deposit deposit) {
-		repository.save(deposit);
-		return new ResponseEntity<>(deposit, HttpStatus.CREATED);
+	public ResponseEntity<Long> createDeposit(@RequestBody Deposit deposit) {
+		deposit = repository.save(deposit);
+		return new ResponseEntity<>(deposit.getId(), HttpStatus.CREATED);
 	}
 
 	@PutMapping(value = "/deposits/{id}", consumes = "application/json", produces = "application/json")
