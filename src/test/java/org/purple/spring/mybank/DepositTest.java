@@ -1,6 +1,7 @@
 package org.purple.spring.mybank;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.purple.spring.mybank.Constants.*;
 
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 @TestMethodOrder(MethodOrderer.MethodName.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class DepositTest {
+	
+
 	@LocalServerPort
 	private int port;
 
@@ -25,14 +28,14 @@ public class DepositTest {
 
 	@Test
 	void checkReadAll() throws Exception {
-		ResponseEntity<Deposit[]> responseEntity = restTemplate.getForEntity("/deposits", Deposit[].class);
+		ResponseEntity<Deposit[]> responseEntity = restTemplate.withBasicAuth(USER, PASSWORD).getForEntity("/deposits", Deposit[].class);
 		Deposit[] depositArray = responseEntity.getBody();
 		assertThat(depositArray[0].getDuration()).isEqualTo(365L);
 	}
 
 	@Test
 	void checkReadOne() throws Exception {
-		ResponseEntity<Deposit> responseEntity = restTemplate.getForEntity("/deposits/1", Deposit.class);
+		ResponseEntity<Deposit> responseEntity = restTemplate.withBasicAuth(USER, PASSWORD).getForEntity("/deposits/1", Deposit.class);
 		Deposit deposit = responseEntity.getBody();
 		assertThat(deposit.getDuration()).isEqualTo(365L);
 	}
@@ -40,25 +43,25 @@ public class DepositTest {
 	@Test
 	void checkCreate() throws Exception {
 		Deposit deposit = new Deposit(100L, "RON");
-		ResponseEntity<Long> responseEntityConfirm = restTemplate.postForEntity("/deposits", deposit, Long.class);
+		ResponseEntity<Long> responseEntityConfirm = restTemplate.withBasicAuth(USER, PASSWORD).postForEntity("/deposits", deposit, Long.class);
 		Long id = responseEntityConfirm.getBody();
 		deposit.setId(id);
-		ResponseEntity<Deposit> responseEntity = restTemplate.getForEntity("/deposits/" + id, Deposit.class);
+		ResponseEntity<Deposit> responseEntity = restTemplate.withBasicAuth(USER, PASSWORD).getForEntity("/deposits/" + id, Deposit.class);
+		assertThat(responseEntityConfirm.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 		Deposit newDeposit = responseEntity.getBody();
 		assertThat(newDeposit).isEqualTo(deposit);
-		assertThat(responseEntityConfirm.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 	}
 
 	@Test
 	void checkUpdate() throws Exception {
 		Deposit deposit = new Deposit(200L, "RON");
-		ResponseEntity<Long> responseEntityConfirm = restTemplate.postForEntity("/deposits", deposit, Long.class);
+		ResponseEntity<Long> responseEntityConfirm = restTemplate.withBasicAuth(USER, PASSWORD).postForEntity("/deposits", deposit, Long.class);
 		Long id = responseEntityConfirm.getBody();
 		deposit.setCurrency("GBP");
 		deposit.setId(id);
-		restTemplate.put("/deposits/" + id, deposit);
+		restTemplate.withBasicAuth(USER, PASSWORD).put("/deposits/" + id, deposit);
 
-		ResponseEntity<Deposit> responseEntity = restTemplate.getForEntity("/deposits/" + id, Deposit.class);
+		ResponseEntity<Deposit> responseEntity = restTemplate.withBasicAuth(USER, PASSWORD).getForEntity("/deposits/" + id, Deposit.class);
 		Deposit newDeposit = responseEntity.getBody();
 
 		assertThat(newDeposit.getCurrency()).isEqualTo("GBP");
@@ -67,12 +70,12 @@ public class DepositTest {
 	@Test
 	void checkDelete() throws Exception {
 		Deposit deposit = new Deposit(300L, "RON");
-		ResponseEntity<Long> responseEntityConfirm = restTemplate.postForEntity("/deposits", deposit, Long.class);
+		ResponseEntity<Long> responseEntityConfirm = restTemplate.withBasicAuth(USER, PASSWORD).postForEntity("/deposits", deposit, Long.class);
 		Long id = responseEntityConfirm.getBody();
 
-		restTemplate.delete("/deposits/" + id);
+		restTemplate.withBasicAuth(USER, PASSWORD).delete("/deposits/" + id);
 
-		ResponseEntity<Deposit> responseEntity = restTemplate.getForEntity("/deposits/" + id, Deposit.class);
+		ResponseEntity<Deposit> responseEntity = restTemplate.withBasicAuth(USER, PASSWORD).getForEntity("/deposits/" + id, Deposit.class);
 		assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 	}
 

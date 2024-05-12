@@ -1,6 +1,7 @@
 package org.purple.spring.mybank;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.purple.spring.mybank.Constants.*;
 
 
 import org.junit.jupiter.api.MethodOrderer;
@@ -24,14 +25,14 @@ public class StatusTest {
 
 	@Test
 	void checkAStatus() throws Exception {
-		AppStatus testStatus = restTemplate.getForObject("http://localhost:" + port + "/status", AppStatus.class);
+		AppStatus testStatus = restTemplate.withBasicAuth(USER, PASSWORD).getForObject("http://localhost:" + port + "/status", AppStatus.class);
 		assertThat(testStatus.requestsCount()).isEqualTo(1);
 		assertThat(testStatus.status()).isEqualTo("yellow");
 	}
 	
 	@Test
 	void checkBIncrement() throws Exception {
-		AppStatus testStatus = restTemplate.getForObject("http://localhost:" + port + "/status", AppStatus.class);
+		AppStatus testStatus = restTemplate.withBasicAuth(USER, PASSWORD).getForObject("http://localhost:" + port + "/status", AppStatus.class);
 		assertThat(testStatus.requestsCount()).isEqualTo(2);
 		assertThat(testStatus.status()).isEqualTo("yellow");
 	}

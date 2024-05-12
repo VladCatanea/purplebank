@@ -43,14 +43,15 @@ public class DepositRest {
 
 	@PutMapping(value = "/deposits/{id}", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<Void> updateDeposit(@RequestBody Deposit newDeposit, @PathVariable Long id) {
-		repository.findById(id).map(deposit -> {
-			deposit.setDuration(newDeposit.getDuration());
-			deposit.setCurrency(newDeposit.getCurrency());
-			return repository.save(deposit);
-		}).orElseGet(() -> {
-			newDeposit.setId(id);
-			return repository.save(newDeposit);
-		});
+		try {
+			repository.findById(id).map(deposit -> {
+				deposit.setDuration(newDeposit.getDuration());
+				deposit.setCurrency(newDeposit.getCurrency());
+				return repository.save(deposit);
+			}).orElseThrow(() -> new EntityNotFoundException(id));
+		} catch (Exception ex) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
