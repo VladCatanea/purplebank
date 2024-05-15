@@ -7,17 +7,17 @@
         class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
             <Pattern>
-                %black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}): %msg%n%throwable
+                %black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1}): %msg%n%throwable
             </Pattern>
         </layout>
     </appender>
 
     <appender name="File"
-        class="ch.qos.logback.core.rolling.RollingFileAppender">
+        class="ch.qos.logback.core.FileAppender">
         <file>${LOGS}/spring-boot-logger.log</file>
         <encoder
             class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <Pattern>%d %p %C{1.} [%t] %m%n</Pattern>
+            <Pattern>%d %p %C{1} [%t] %m%n</Pattern>
         </encoder>
     </appender>
     
@@ -27,8 +27,8 @@
         <appender-ref ref="Console" />
     </root>
 
-    <!-- LOG "com.baeldung*" at TRACE level -->
-    <logger name="com.baeldung" level="trace" additivity="false">
+    <!-- LOG at TRACE level -->
+    <logger name="org.purple" level="trace" additivity="false">
         <appender-ref ref="File" />
         <appender-ref ref="Console" />
     </logger>

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class DepositRest {
 	private final DepositRepository repository;
-	Logger logger = LoggerFactory.getLogger(getClass());
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	public DepositRest(DepositRepository repository) {
 		this.repository = repository;
@@ -31,8 +31,10 @@ public class DepositRest {
 
 	@GetMapping("/deposits/{id}")
 	public ResponseEntity<Deposit> getDeposit(@PathVariable Long id) {
+		logger.info("Searching for deposit with id " + id);
 		try {
 			Deposit deposit = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
+			logger.info("Returning deposit with id " + id);
 			return new ResponseEntity<>(deposit, HttpStatus.FOUND);
 		} catch (Exception DepositNotFoundException) {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -42,12 +44,14 @@ public class DepositRest {
 	@PostMapping(value = "/deposits", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<Long> createDeposit(@RequestBody Deposit deposit) {
 		deposit = repository.save(deposit);
+		logger.info("Created deposit with id " + deposit.getId());
 		return new ResponseEntity<>(deposit.getId(), HttpStatus.CREATED);
 	}
 
 	@PutMapping(value = "/deposits/{id}", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<Void> updateDeposit(@RequestBody Deposit newDeposit, @PathVariable Long id) {
 		try {
+			logger.info("Updating deposit with id " + id);
 			repository.findById(id).map(deposit -> {
 				deposit.setDuration(newDeposit.getDuration());
 				deposit.setCurrency(newDeposit.getCurrency());
@@ -61,6 +65,7 @@ public class DepositRest {
 
 	@DeleteMapping(value = "deposits/{id}")
 	public ResponseEntity<Void> deleteDeposit(@PathVariable Long id) {
+		logger.info("Deleting deposit with id "+ id);
 		repository.deleteById(id);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
