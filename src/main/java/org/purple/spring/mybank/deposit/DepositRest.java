@@ -32,13 +32,9 @@ public class DepositRest {
 	@GetMapping("/deposits/{id}")
 	public ResponseEntity<Deposit> getDeposit(@PathVariable Long id) {
 		logger.info("Searching for deposit with id " + id);
-		try {
-			Deposit deposit = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
-			logger.info("Returning deposit with id " + id);
-			return new ResponseEntity<>(deposit, HttpStatus.FOUND);
-		} catch (Exception DepositNotFoundException) {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		}
+		Deposit deposit = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, "deposit"));
+		logger.info("Returning deposit with id " + id);
+		return new ResponseEntity<>(deposit, HttpStatus.FOUND);
 	}
 
 	@PostMapping(value = "/deposits", consumes = "application/json", produces = "application/json")
@@ -50,22 +46,18 @@ public class DepositRest {
 
 	@PutMapping(value = "/deposits/{id}", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<Void> updateDeposit(@RequestBody Deposit newDeposit, @PathVariable Long id) {
-		try {
-			logger.info("Updating deposit with id " + id);
-			repository.findById(id).map(deposit -> {
-				deposit.setDuration(newDeposit.getDuration());
-				deposit.setCurrency(newDeposit.getCurrency());
-				return repository.save(deposit);
-			}).orElseThrow(() -> new EntityNotFoundException(id));
-		} catch (Exception ex) {
-			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		}
+		logger.info("Updating deposit with id " + id);
+		repository.findById(id).map(deposit -> {
+			deposit.setDuration(newDeposit.getDuration());
+			deposit.setCurrency(newDeposit.getCurrency());
+			return repository.save(deposit);
+		}).orElseThrow(() -> new EntityNotFoundException(id, "deposit"));
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 	@DeleteMapping(value = "deposits/{id}")
 	public ResponseEntity<Void> deleteDeposit(@PathVariable Long id) {
-		logger.info("Deleting deposit with id "+ id);
+		logger.info("Deleting deposit with id " + id);
 		repository.deleteById(id);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
