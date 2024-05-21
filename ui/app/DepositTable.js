@@ -10,13 +10,15 @@ const DepositTable = (props) => (
 			</tr>
 		</thead>
 		<tbody>
-            {props.deposits.map((deposit) => (
-                <tr>
-                    <td>{deposit.id}</td>
-                    <td>{deposit.currency}</td>
-                    <td>{deposit.duration}</td>
-                </tr>
-            ) )}
+			{props.deposits.length > 0 ? (props.deposits.map((deposit) => (
+				<tr>
+					<td>{deposit.id}</td>
+					<td>{deposit.currency}</td>
+					<td>{deposit.duration}</td>
+				</tr>
+			))) : (<tr>
+				<td colSpan={3}>No deposits</td>
+			</tr>)}
 		</tbody>
 	</table>
 )

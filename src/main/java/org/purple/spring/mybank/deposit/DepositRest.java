@@ -22,7 +22,7 @@ public class DepositRest {
 	public DepositRest(DepositRepository repository) {
 		this.repository = repository;
 	}
-
+	
 	@GetMapping(value = "/api/deposits", produces = "application/json")
 	public ResponseEntity<List<Deposit>> listDeposits() {
 		logger.info("Returning list of all deposits");
