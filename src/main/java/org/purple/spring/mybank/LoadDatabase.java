@@ -10,6 +10,7 @@ public class LoadDatabase {
 	@Bean
 	int initDatabase(DepositRepository repository) {
 		repository.save(new Deposit(365L, "EUR"));
+		repository.save(new Deposit(100L, "RON"));
 		return 1;
 	}
 }
