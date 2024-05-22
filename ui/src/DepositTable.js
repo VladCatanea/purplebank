@@ -1,26 +1,25 @@
 import React from 'react'
+import { Table } from 'reactstrap'
 
 const DepositTable = (props) => (
-	<table>
+	<Table className="mt-4">
 		<thead>
 			<tr>
-				<th>Id</th>
-				<th>Currency</th>
-				<th>Duration</th>
+				<th width="20%">Id</th>
+				<th width="20%">Currency</th>
+				<th width="20%">Duration</th>
 			</tr>
 		</thead>
 		<tbody>
-			{props.deposits.length > 0 ? (props.deposits.map((deposit) => (
-				<tr>
+			{props.deposits.map((deposit) => (
+				<tr key={deposit.id}>
 					<td>{deposit.id}</td>
 					<td>{deposit.currency}</td>
 					<td>{deposit.duration}</td>
 				</tr>
-			))) : (<tr>
-				<td colSpan={3}>No deposits</td>
-			</tr>)}
+			))}
 		</tbody>
-	</table>
+	</Table>
 )
 
 export default DepositTable

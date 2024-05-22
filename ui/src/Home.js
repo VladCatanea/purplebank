@@ -14,7 +14,7 @@ const Home = () => {
 		<div>
       <AppNavbar/>
 			<div className="container">
-				<h1>CRUD App with Hooks</h1>
+				<h1>Purple Bank</h1>
 				<a href="/deposits">View all deposits</a>
 			</div>
 		</div>

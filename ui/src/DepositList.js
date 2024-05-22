@@ -1,9 +1,10 @@
 "use client"
 
-import React, { useEffect, useLayoutEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import DepositTable from './DepositTable'
 import AppNavbar from './AppNavbar'
 import "./App.css"
+import { Container } from 'reactstrap'
 
 const DepositList = () => {
 	const initialDeposits = []
@@ -30,10 +31,12 @@ const DepositList = () => {
 	return (
 		<div>
       <AppNavbar/>
-			<div className="container">
-				<h1>CRUD App with Hooks</h1>
+	  <Container fluid>
+			<div>
+				<h1>Deposit List</h1>
 				<DepositTable deposits={deposits} />
 			</div>
+			</Container>
 		</div>
 	)
 }
