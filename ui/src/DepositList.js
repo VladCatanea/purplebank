@@ -7,8 +7,6 @@ import "./App.css"
 import { Container } from 'reactstrap'
 
 const DepositList = () => {
-	const initialDeposits = []
-
 	const [deposits, setDeposits] = useState([])
 	const [loading, setLoading] = useState(false);
 

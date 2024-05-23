@@ -5,11 +5,6 @@ import AppNavbar from './AppNavbar'
 import "./App.css"
 
 const Home = () => {
-	const initialDeposits = []
-
-	const [deposits, setDeposits] = useState([])
-	const [loading, setLoading] = useState(false);
-
 	return (
 		<div>
       <AppNavbar/>

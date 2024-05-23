@@ -1,7 +1,5 @@
-package org.purple.spring.mybank.deposit;
+package org.purple.spring.mybank.errors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -12,10 +10,28 @@ public class EntityNotFoundException extends RuntimeException {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private Logger logger = LoggerFactory.getLogger(getClass());
+	private Long id;
+	private String type;
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
 
 	public EntityNotFoundException(Long id, String type) {
 	    super("Could not find entity of type " + type + " and id " + id);
-	    logger.error("Could not find entity of type "+ type + " and id " + id);
+	    this.id = id;
+	    this.type = type;
 	  }
 	}
