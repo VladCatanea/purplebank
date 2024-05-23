@@ -2,6 +2,7 @@ package org.purple.spring.mybank.deposit;
 
 import java.util.List;
 
+import org.purple.spring.mybank.errors.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -22,14 +23,14 @@ public class DepositRest {
 	public DepositRest(DepositRepository repository) {
 		this.repository = repository;
 	}
-
-	@GetMapping(value = "/deposits", produces = "application/json")
+	
+	@GetMapping(value = "/api/deposits", produces = "application/json")
 	public ResponseEntity<List<Deposit>> listDeposits() {
 		logger.info("Returning list of all deposits");
 		return new ResponseEntity<>(repository.findAll(), HttpStatus.FOUND);
 	}
 
-	@GetMapping("/deposits/{id}")
+	@GetMapping("/api/deposits/{id}")
 	public ResponseEntity<Deposit> getDeposit(@PathVariable Long id) {
 		logger.info("Searching for deposit with id " + id);
 		Deposit deposit = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, "deposit"));
@@ -37,14 +38,14 @@ public class DepositRest {
 		return new ResponseEntity<>(deposit, HttpStatus.FOUND);
 	}
 
-	@PostMapping(value = "/deposits", consumes = "application/json", produces = "application/json")
+	@PostMapping(value = "/api/deposits", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<Long> createDeposit(@RequestBody Deposit deposit) {
 		deposit = repository.save(deposit);
 		logger.info("Created deposit with id " + deposit.getId());
 		return new ResponseEntity<>(deposit.getId(), HttpStatus.CREATED);
 	}
 
-	@PutMapping(value = "/deposits/{id}", consumes = "application/json", produces = "application/json")
+	@PutMapping(value = "/api/deposits/{id}", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<Void> updateDeposit(@RequestBody Deposit newDeposit, @PathVariable Long id) {
 		logger.info("Updating deposit with id " + id);
 		repository.findById(id).map(deposit -> {
@@ -55,7 +56,7 @@ public class DepositRest {
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
-	@DeleteMapping(value = "deposits/{id}")
+	@DeleteMapping(value = "/api/deposits/{id}")
 	public ResponseEntity<Void> deleteDeposit(@PathVariable Long id) {
 		logger.info("Deleting deposit with id " + id);
 		repository.deleteById(id);
