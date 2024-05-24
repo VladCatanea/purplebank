@@ -29,6 +29,7 @@ public class DepositTest {
 	@Test
 	void checkReadAll() throws Exception {
 		ResponseEntity<Deposit[]> responseEntity = restTemplate.withBasicAuth(USER, PASSWORD).getForEntity("/api/deposits", Deposit[].class);
+		assertThat(responseEntity.getBody()).isNotEmpty();
 		Deposit[] depositArray = responseEntity.getBody();
 		assertThat(depositArray[0].getDuration()).isEqualTo(365L);
 	}
@@ -43,7 +44,7 @@ public class DepositTest {
 	@Test
 	void checkCreate() throws Exception {
 		Deposit deposit = new Deposit(100L, "RON");
-		ResponseEntity<Long> responseEntityConfirm = restTemplate.withBasicAuth(USER, PASSWORD).postForEntity("/api/deposits", deposit, Long.class);
+		ResponseEntity<Long> responseEntityConfirm = restTemplate.withBasicAuth(ADMIN, PASSWORD).postForEntity("/api/deposits", deposit, Long.class);
 		Long id = responseEntityConfirm.getBody();
 		deposit.setId(id);
 		ResponseEntity<Deposit> responseEntity = restTemplate.withBasicAuth(USER, PASSWORD).getForEntity("/api/deposits/" + id, Deposit.class);
@@ -55,11 +56,11 @@ public class DepositTest {
 	@Test
 	void checkUpdate() throws Exception {
 		Deposit deposit = new Deposit(200L, "RON");
-		ResponseEntity<Long> responseEntityConfirm = restTemplate.withBasicAuth(USER, PASSWORD).postForEntity("/api/deposits", deposit, Long.class);
+		ResponseEntity<Long> responseEntityConfirm = restTemplate.withBasicAuth(ADMIN, PASSWORD).postForEntity("/api/deposits", deposit, Long.class);
 		Long id = responseEntityConfirm.getBody();
 		deposit.setCurrency("GBP");
 		deposit.setId(id);
-		restTemplate.withBasicAuth(USER, PASSWORD).put("/api/deposits/" + id, deposit);
+		restTemplate.withBasicAuth(ADMIN, PASSWORD).put("/api/deposits/" + id, deposit);
 
 		ResponseEntity<Deposit> responseEntity = restTemplate.withBasicAuth(USER, PASSWORD).getForEntity("/api/deposits/" + id, Deposit.class);
 		Deposit newDeposit = responseEntity.getBody();
@@ -70,10 +71,10 @@ public class DepositTest {
 	@Test
 	void checkDelete() throws Exception {
 		Deposit deposit = new Deposit(300L, "RON");
-		ResponseEntity<Long> responseEntityConfirm = restTemplate.withBasicAuth(USER, PASSWORD).postForEntity("/api/deposits", deposit, Long.class);
+		ResponseEntity<Long> responseEntityConfirm = restTemplate.withBasicAuth(ADMIN, PASSWORD).postForEntity("/api/deposits", deposit, Long.class);
 		Long id = responseEntityConfirm.getBody();
 
-		restTemplate.withBasicAuth(USER, PASSWORD).delete("/api/deposits/" + id);
+		restTemplate.withBasicAuth(ADMIN, PASSWORD).delete("/api/deposits/" + id);
 
 		ResponseEntity<Deposit> responseEntity = restTemplate.withBasicAuth(USER, PASSWORD).getForEntity("/api/deposits/" + id, Deposit.class);
 		assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);

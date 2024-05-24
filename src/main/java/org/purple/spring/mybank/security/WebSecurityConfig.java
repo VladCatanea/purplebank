@@ -3,6 +3,7 @@ package org.purple.spring.mybank.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -16,6 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class WebSecurityConfig {
 
 	   @Bean
@@ -36,8 +38,9 @@ public class WebSecurityConfig {
 //		UserDetails user = User.withDefaultPasswordEncoder().username("user").password("password").roles("USER")
 //				.build();
 		UserDetails user = User.withUsername("user").password("{bcrypt}$2a$10$E8.mU2DkqCOwvR87cFh4geJTQehso33IHBbChZ58wNrtBxy7IwfOW").roles("USER").build();
-
-		return new InMemoryUserDetailsManager(user);
+		UserDetails admin = User.withUsername("admin").password("{bcrypt}$2a$10$E8.mU2DkqCOwvR87cFh4geJTQehso33IHBbChZ58wNrtBxy7IwfOW").roles("ADMIN").build();
+		
+		return new InMemoryUserDetailsManager(user, admin);
 	}
 
 	@Bean
@@ -45,4 +48,5 @@ public class WebSecurityConfig {
 		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 		return encoder;
 	}
+	
 }

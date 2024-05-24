@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,14 +38,16 @@ public class DepositRest {
 		logger.info("Returning deposit with id " + id);
 		return new ResponseEntity<>(deposit, HttpStatus.FOUND);
 	}
-
+	
+	@Secured("ROLE_ADMIN")
 	@PostMapping(value = "/api/deposits", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<Long> createDeposit(@RequestBody Deposit deposit) {
 		deposit = repository.save(deposit);
 		logger.info("Created deposit with id " + deposit.getId());
 		return new ResponseEntity<>(deposit.getId(), HttpStatus.CREATED);
 	}
-
+	
+	@Secured("ROLE_ADMIN")
 	@PutMapping(value = "/api/deposits/{id}", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<Void> updateDeposit(@RequestBody Deposit newDeposit, @PathVariable Long id) {
 		logger.info("Updating deposit with id " + id);
@@ -55,7 +58,8 @@ public class DepositRest {
 		}).orElseThrow(() -> new EntityNotFoundException(id, "deposit"));
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
-
+	
+	@Secured("ROLE_ADMIN")
 	@DeleteMapping(value = "/api/deposits/{id}")
 	public ResponseEntity<Void> deleteDeposit(@PathVariable Long id) {
 		logger.info("Deleting deposit with id " + id);
