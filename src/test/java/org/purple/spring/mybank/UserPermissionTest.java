@@ -1,12 +1,14 @@
 package org.purple.spring.mybank;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.purple.spring.mybank.Constants.ADMIN;
 import static org.purple.spring.mybank.Constants.PASSWORD;
 import static org.purple.spring.mybank.Constants.USER;
 
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.purple.spring.mybank.security.Permission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -25,7 +27,9 @@ public class UserPermissionTest {
 
 	@Test
 	void checkRead() {
-		ResponseEntity<String> response = restTemplate.withBasicAuth(USER, PASSWORD).getForEntity("/api/permission", String.class);
-		assertThat(response.getBody()).isEqualTo("USER");
+		ResponseEntity<Permission> response = restTemplate.withBasicAuth(USER, PASSWORD).getForEntity("/api/permission", Permission.class);
+		assertThat(response.getBody().getPermission()).isEqualTo("USER");
+		response = restTemplate.withBasicAuth(ADMIN, PASSWORD).getForEntity("/api/permission", Permission.class);
+		assertThat(response.getBody().getPermission()).isEqualTo("ADMIN");
 	}
 }

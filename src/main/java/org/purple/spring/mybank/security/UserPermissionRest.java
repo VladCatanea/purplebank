@@ -14,17 +14,17 @@ public class UserPermissionRest {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	
 	@GetMapping(value = "/api/permission", produces = "application/json")
-	public ResponseEntity<String> getPermission(Authentication authentication) {
+	public ResponseEntity<Permission> getPermission(Authentication authentication) {
 		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-		logger.info("Returning user permission: {}", userDetails);
+		logger.info("Returning user permission: {}", userDetails);	
 		Boolean adminPermission = userDetails != null && userDetails.getAuthorities().stream()
-			      .anyMatch(a -> a.getAuthority().equals("ADMIN"));
-		String permission;
+			      .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+		Permission permission = new Permission();
 		if (adminPermission) {
-			permission = "ADMIN";
+			permission.setPermission("ADMIN");
 		}
 		else {
-			permission = "USER";
+			permission.setPermission("USER");
 		}
 		return new ResponseEntity<>(permission, HttpStatus.FOUND);
 	}
