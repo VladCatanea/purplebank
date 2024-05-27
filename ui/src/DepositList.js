@@ -25,46 +25,50 @@ const DepositList = () => {
 	useEffect(() => {
 		setLoading(true);
 		fetch('/api/permission', { method: 'GET' })
-		.then(response => response.json())
+			.then(response => response.json())
 			.then(result => {
 				setPermission(result.permission);
 				setLoading(false);
 			})
 	}, []);
 
+	const remove = async (id) => {
+		await fetch(`/api/deposits/${id}`, {
+			method: 'DELETE',
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			}
+		}).then(() => {
+			fetch('/api/deposits', { method: 'GET' })
+				.then(response => response.json())
+				.then(result => {
+					setDeposits(result);
+				})
+		});
+	}
+
 	if (loading) {
 		return <p>Loading...</p>
 	}
 
-	if (permission == "ADMIN") {
-		return (
-			<div>
-				<AppNavbar />
-				<Container fluid>
-					<div>
-						<div className="float-end">
-							<Button color="success" tag={Link} to="/groups/new">Add Group</Button>
-						</div>
-						<h1>Deposit List</h1>
-						<DepositTable deposits={deposits} permission={permission}/>
-					</div>
-				</Container>
-			</div>
-		)
-	}
-	else {
-		return (
-			<div>
-				<AppNavbar />
-				<Container fluid>
-					<div>
-						<h1>Deposit List</h1>
-						<DepositTable deposits={deposits} />
-					</div>
-				</Container>
-			</div>
-		)
-	}
+
+	return (
+		<div>
+			<AppNavbar />
+			<Container fluid>
+				<div>
+					{
+						permission === "ADMIN" ? (<div className="float-end">
+							<Button color="success" tag={Link} to="/deposits/new">Add Deposit</Button> </div>)
+							: (<div></div>)
+					}
+					<h1>Deposit List</h1>
+					<DepositTable deposits={deposits} permission={permission} remove={remove} />
+				</div>
+			</Container>
+		</div>
+	)
 }
 
 export default DepositList

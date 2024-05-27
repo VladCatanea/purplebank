@@ -9,7 +9,7 @@ const DepositTable = (props) => (
 				<th width="20%">Id</th>
 				<th width="20%">Currency</th>
 				<th width="20%">Duration</th>
-				{props.permission == "ADMIN" ? (<th width="20%">Actions</th>) : (<th width="20%"></th>)}
+				{props.permission === "ADMIN" ? (<th width="20%">Actions</th>) : (<th width="20%"></th>)}
 			</tr>
 		</thead>
 		<tbody>
@@ -18,11 +18,11 @@ const DepositTable = (props) => (
 					<td>{deposit.id}</td>
 					<td>{deposit.currency}</td>
 					<td>{deposit.duration}</td>
-					{props.permission == "ADMIN" ? (
+					{props.permission === "ADMIN" ? (
 
 						<td>
-							<Button color="success" tag={Link} to="/groups/edit">Edit deposit</Button>
-							<Button color="success" tag={Link} to="/groups/delete">Delete deposit</Button>
+							<Button size="sm" color="primary" tag={Link} to={"/deposits/edit/" + deposit.id}>Edit deposit</Button>
+							<Button size="sm" color="danger" onClick={() => props.remove(deposit.id)}>Delete deposit</Button>
 						</td>) : (<td></td>)}
 				</tr>
 			))}
