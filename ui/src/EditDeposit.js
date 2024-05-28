@@ -53,7 +53,7 @@ const EditDeposit = () => {
         <div>
             <AppNavbar />
             <Container fluid>
-                <h1>New Deposit</h1>
+                <h1>Edit Deposit</h1>
                 <br />
                 <Form>
                     <Label>Currency</Label>

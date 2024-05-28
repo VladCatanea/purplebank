@@ -6,6 +6,7 @@ import AppNavbar from './AppNavbar'
 import "./App.css"
 import { Button, Container } from 'reactstrap'
 import { Link } from 'react-router-dom'
+import { ROLE_ADMIN } from "./Constants"
 
 const DepositList = () => {
 	const [deposits, setDeposits] = useState([])
@@ -59,8 +60,8 @@ const DepositList = () => {
 			<Container fluid>
 				<div>
 					{
-						permission === "ADMIN" ? (<div className="float-end">
-							<Button color="success" tag={Link} to="/deposits/new">Add Deposit</Button> </div>)
+						permission === ROLE_ADMIN ? (<div className="float-end">
+							<button className="button create" onClick={() => window.location.href ="/deposits/new"}>Add Deposit</button> </div>)
 							: (<div></div>)
 					}
 					<h1>Deposit List</h1>

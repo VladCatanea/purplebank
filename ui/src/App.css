@@ -32,7 +32,54 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
+
+nav+.container,
+nav+.container-fluid {
+  margin-top: 20px;
+}
+
+.button {
+  font-size: 16px;
+  font-weight: 400;
+  display: inline-block;
+  color: #FFF;
+  border-radius: .25em;
+  border: 0px;
+  line-height: 40px;
+  transition: ease-in-out .2s;
+  padding: 0 16px;
+}
+
+.create {
+  background-color: rgb(45, 134, 23);
+  margin: 10px;
+}
+
+.edit {
+  background-color: rgb(89, 89, 184);
+  margin: 10px;
+}
+
+.delete {
+  background-color: rgb(165, 72, 62);
+  margin: 10px;
+}
+
+.create:hover{
+  background-color: rgb(64, 162, 40);
+}
+
+.edit:hover {
+  background-color: rgb(126, 126, 206);
+}
+
+.delete:hover {
+  background-color: rgb(181, 111, 103);
+}
+
+

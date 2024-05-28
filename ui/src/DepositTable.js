@@ -1,6 +1,6 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import { Button, Table } from 'reactstrap'
+import { Table } from 'reactstrap'
+import { ROLE_ADMIN } from "./Constants"
 
 const DepositTable = (props) => (
 	<Table className="mt-4">
@@ -9,7 +9,7 @@ const DepositTable = (props) => (
 				<th width="20%">Id</th>
 				<th width="20%">Currency</th>
 				<th width="20%">Duration</th>
-				{props.permission === "ADMIN" ? (<th width="20%">Actions</th>) : (<th width="20%"></th>)}
+				{props.permission === ROLE_ADMIN ? (<th width="20%"><div align="left">Actions</div></th>) : (<th width="20%"></th>)}
 			</tr>
 		</thead>
 		<tbody>
@@ -18,11 +18,11 @@ const DepositTable = (props) => (
 					<td>{deposit.id}</td>
 					<td>{deposit.currency}</td>
 					<td>{deposit.duration}</td>
-					{props.permission === "ADMIN" ? (
+					{props.permission === ROLE_ADMIN ? (
 
 						<td>
-							<Button size="sm" color="primary" tag={Link} to={"/deposits/edit/" + deposit.id}>Edit deposit</Button>
-							<Button size="sm" color="danger" onClick={() => props.remove(deposit.id)}>Delete deposit</Button>
+							<button className="button edit" size="sm" onClick={() => window.location.href = `/deposits/edit/${deposit.id}`}>Edit deposit</button>
+							<button className="button delete" size="sm" onClick={() => props.remove(deposit.id)}>Delete deposit</button>
 						</td>) : (<td></td>)}
 				</tr>
 			))}
