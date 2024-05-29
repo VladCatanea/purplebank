@@ -27,14 +27,14 @@ public class DepositTest {
 		ResponseEntity<Deposit[]> responseEntity = restTemplate.withBasicAuth(USER, PASSWORD).getForEntity("/api/deposits", Deposit[].class);
 		assertThat(responseEntity.getBody()).isNotEmpty();
 		Deposit[] depositArray = responseEntity.getBody();
-		assertThat(depositArray[0].getDuration()).isEqualTo(365L);
+		assertThat(depositArray[0].getDuration()).isEqualTo(100L);
 	}
 
 	@Test
 	void checkReadOne() throws Exception {
 		ResponseEntity<Deposit> responseEntity = restTemplate.withBasicAuth(USER, PASSWORD).getForEntity("/api/deposits/1", Deposit.class);
 		Deposit deposit = responseEntity.getBody();
-		assertThat(deposit.getDuration()).isEqualTo(365L);
+		assertThat(deposit.getDuration()).isEqualTo(100L);
 	}
 
 	@Test
