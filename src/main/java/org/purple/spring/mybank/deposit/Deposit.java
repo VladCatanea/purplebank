@@ -24,15 +24,21 @@ public class Deposit {
 	}
 
 	@Override
-	public boolean equals(Object o) {
+	public int hashCode() {
+		return Objects.hash(currency, duration, id);
+	}
 
-		if (this == o)
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
 			return true;
-		if (!(o instanceof Deposit))
+		if (obj == null)
 			return false;
-		Deposit deposit = (Deposit) o;
-		return Objects.equals(this.id, deposit.id) && Objects.equals(this.duration, deposit.duration)
-				&& Objects.equals(this.currency, deposit.currency);
+		if (getClass() != obj.getClass())
+			return false;
+		Deposit other = (Deposit) obj;
+		return Objects.equals(currency, other.currency) && Objects.equals(duration, other.duration)
+				&& Objects.equals(id, other.id);
 	}
 
 	@Override

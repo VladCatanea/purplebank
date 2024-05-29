@@ -33,9 +33,9 @@ public class DepositRest {
 
 	@GetMapping("/api/deposits/{id}")
 	public ResponseEntity<Deposit> getDeposit(@PathVariable Long id) {
-		logger.info("Searching for deposit with id " + id);
+		logger.info("Searching for deposit with id {}", id);
 		Deposit deposit = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, "deposit"));
-		logger.info("Returning deposit with id " + id);
+		logger.info("Returning deposit with id {}", id);
 		return new ResponseEntity<>(deposit, HttpStatus.FOUND);
 	}
 	
@@ -43,14 +43,14 @@ public class DepositRest {
 	@PostMapping(value = "/api/deposits", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<Long> createDeposit(@RequestBody Deposit deposit) {
 		deposit = repository.save(deposit);
-		logger.info("Created deposit with id " + deposit.getId());
+		logger.info("Created deposit with id {}", deposit.getId());
 		return new ResponseEntity<>(deposit.getId(), HttpStatus.CREATED);
 	}
 	
 	@Secured("ROLE_ADMIN")
 	@PutMapping(value = "/api/deposits/{id}", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<Void> updateDeposit(@RequestBody Deposit newDeposit, @PathVariable Long id) {
-		logger.info("Updating deposit with id " + id);
+		logger.info("Updating deposit with id {}", id);
 		repository.findById(id).map(deposit -> {
 			deposit.setDuration(newDeposit.getDuration());
 			deposit.setCurrency(newDeposit.getCurrency());
@@ -62,7 +62,7 @@ public class DepositRest {
 	@Secured("ROLE_ADMIN")
 	@DeleteMapping(value = "/api/deposits/{id}")
 	public ResponseEntity<Void> deleteDeposit(@PathVariable Long id) {
-		logger.info("Deleting deposit with id " + id);
+		logger.info("Deleting deposit with id {}", id);
 		repository.deleteById(id);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

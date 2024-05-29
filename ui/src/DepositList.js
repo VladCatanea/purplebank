@@ -62,7 +62,7 @@ const DepositList = () => {
 					{
 						permission === ROLE_ADMIN ? (<div className="float-end">
 							<button className="button create" onClick={() => window.location.href ="/deposits/new"}>Add Deposit</button> </div>)
-							: (<div></div>)
+							: (null)
 					}
 					<h1>Deposit List</h1>
 					<DepositTable deposits={deposits} permission={permission} remove={remove} />
