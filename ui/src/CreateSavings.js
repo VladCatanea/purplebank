@@ -39,7 +39,7 @@ const CreateSavings = () => {
     const submitForm = async (event) => {
         event.preventDefault()
 
-        await fetch(`/api/savings/`, {
+        await fetch(`/api/savings`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

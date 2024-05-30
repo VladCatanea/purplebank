@@ -9,7 +9,6 @@ import { Container } from 'reactstrap'
 const SavingsList = () => {
     const [savings, setSavings] = useState([])
     const [loading, setLoading] = useState(false);
-    // const [permission, setPermission] = useState("");
 
     useEffect(() => {
         setLoading(true);
@@ -21,16 +20,6 @@ const SavingsList = () => {
             })
     }, []);
 
-    // useEffect(() => {
-    //     setLoading(true);
-    //     fetch('/api/permission', { method: 'GET' })
-    //         .then(response => response.json())
-    //         .then(result => {
-    //             setPermission(result.permission);
-    //             setLoading(false);
-    //         })
-    // }, []);
-
     const remove = async (id) => {
         await fetch(`/api/savings/${id}`, {
             method: 'DELETE',
@@ -39,7 +28,7 @@ const SavingsList = () => {
                 'Content-Type': 'application/json'
             }
         }).then(() => {
-            fetch('/api/savingss', { method: 'GET' })
+            fetch('/api/savings', { method: 'GET' })
                 .then(response => response.json())
                 .then(result => {
                     setSavings(result);
