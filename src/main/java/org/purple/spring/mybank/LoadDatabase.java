@@ -1,8 +1,8 @@
 package org.purple.spring.mybank;
 
-import static org.purple.spring.mybank.Constants.*;
+import static org.purple.spring.mybank.Constants.USER;
 
-import java.util.Date;
+import java.util.Calendar;
 
 import org.purple.spring.mybank.deposit.Deposit;
 import org.purple.spring.mybank.deposit.DepositRepository;
@@ -17,7 +17,7 @@ public class LoadDatabase {
 	int initDatabase(DepositRepository depositRepository, SavingsRepository savingsRepository) {
 		depositRepository.save(new Deposit(100L, "RON"));
 		depositRepository.save(new Deposit(365L, "EUR"));
-		savingsRepository.save(new Savings(1L, 20L, USER, new Date()));
+		savingsRepository.save(new Savings(1L, 20L, USER, Calendar.getInstance()));
 		return 1;
 	}
 }

@@ -5,8 +5,6 @@ import static org.purple.spring.mybank.Constants.ADMIN;
 import static org.purple.spring.mybank.Constants.PASSWORD;
 import static org.purple.spring.mybank.Constants.USER;
 
-import java.util.Date;
-
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -34,7 +32,7 @@ public class SavingsTest {
 	
 	@Test
 	void checkReadAll() throws Exception {
-		Savings defaultSavings = new Savings(1L, 20L, USER, new Date());
+		Savings defaultSavings = new Savings(1L, 20L, USER, null);
 		defaultSavings.setId(1L);
 		// try with USER
 		ResponseEntity<Savings[]> responseEntity = restTemplate.withBasicAuth(USER, PASSWORD)
@@ -48,7 +46,7 @@ public class SavingsTest {
 
 	@Test
 	void checkCreate() throws Exception {
-		Savings savings = new Savings(2L, 40L, ADMIN, new Date());
+		Savings savings = new Savings(2L, 40L, ADMIN, null);
 		ResponseEntity<Long> responseEntityConfirm = restTemplate.withBasicAuth(USER, PASSWORD)
 				.postForEntity("/api/savings", savings, Long.class);
 		assertThat(responseEntityConfirm.getStatusCode()).isEqualTo(HttpStatus.CREATED);
@@ -58,12 +56,12 @@ public class SavingsTest {
 		ResponseEntity<Savings> responseEntity = restTemplate.withBasicAuth(USER, PASSWORD)
 				.getForEntity("/api/savings/" + id, Savings.class);
 		assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.FOUND);
-		assertThat(responseEntity.getBody()).isEqualTo(savings);
+		assertThat(responseEntity.getBody().getAmount()).isEqualTo(40L);
 	}
 	
 	@Test
 	void checkEdit() throws Exception {
-		Savings savings = new Savings(1L, 100L, USER, new Date());
+		Savings savings = new Savings(1L, 100L, USER, null);
 		Long id = createSavings(savings);
 		savings.setId(id);
 		savings.setAmount(100000L);
@@ -76,7 +74,7 @@ public class SavingsTest {
 
 	@Test
 	void checkDelete() throws Exception {
-		Savings savings = new Savings(1L, 50L, USER, new Date());
+		Savings savings = new Savings(1L, 50L, USER, null);
 		Long id = createSavings(savings);
 		savings.setId(id);
 		restTemplate.withBasicAuth(USER, PASSWORD).delete("/api/savings/" + id);

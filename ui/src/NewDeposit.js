@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import AppNavbar from './AppNavbar'
 import "./App.css"
 import { Button, Container, Form, Input, Label } from 'reactstrap'

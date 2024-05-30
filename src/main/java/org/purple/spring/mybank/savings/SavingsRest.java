@@ -1,7 +1,9 @@
 package org.purple.spring.mybank.savings;
 
+import java.util.Calendar;
 import java.util.List;
 
+import org.purple.spring.mybank.deposit.Deposit;
 import org.purple.spring.mybank.deposit.DepositRepository;
 import org.purple.spring.mybank.errors.EntityNotFoundException;
 import org.slf4j.Logger;
@@ -19,12 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class SavingsRest {
-	private final SavingsRepository repository;
+	private final SavingsRepository savingsRepository;
 	private final DepositRepository depositRepository;
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
-	public SavingsRest(SavingsRepository repository, DepositRepository depositRepository) {
-		this.repository = repository;
+	public SavingsRest(SavingsRepository savingsRepository, DepositRepository depositRepository) {
+		this.savingsRepository = savingsRepository;
 		this.depositRepository = depositRepository;
 	}
 
@@ -32,26 +34,30 @@ public class SavingsRest {
 	public ResponseEntity<List<Savings>> listSavings(Authentication authentication) {
 		String username = authentication.getName();
 		logger.info("Returning list of all savings");
-		return new ResponseEntity<>(repository.findByOwner(username), HttpStatus.FOUND);
+		return new ResponseEntity<>(savingsRepository.findByOwner(username), HttpStatus.FOUND);
 	}
 
 	@GetMapping(value = "/api/savings/{id}")
 	public ResponseEntity<Savings> oneSavings(@PathVariable Long id, Authentication authentication) {
 		String owner = authentication.getName();
-		logger.info("Searching for deposit with id {}", id);
-		Savings savings = repository.findByIdAndOwner(id, owner).orElseThrow(() -> new EntityNotFoundException(id, "savings"));
-		logger.info("Returning deposit with id {}", id);
+		logger.debug("Searching for savings with owner {} and id {}", owner, id);
+		Savings savings = savingsRepository.findByIdAndOwner(id, owner).orElseThrow(() -> new EntityNotFoundException(id, "savings"));
+		logger.debug("Returning savings with owner {} and id {}", owner, id);
 		return new ResponseEntity<>(savings, HttpStatus.FOUND);
 	}
 
-	@PostMapping(value = "/api/savings")
+	@PostMapping(value = "/api/savings", produces = "application/json")
 	public ResponseEntity<Long> createSavings(@RequestBody Savings savings, Authentication authentication) {
+		logger.debug("User attempts to create deposit");
 		savings.setOwner(authentication.getName());
 		Long depositId = savings.getDepositId();
-		depositRepository.findById(savings.getDepositId())
+		Deposit deposit = depositRepository.findById(savings.getDepositId())
 				.orElseThrow(() -> new EntityNotFoundException(depositId, "deposit"));
-		savings = repository.save(savings);
-		logger.info("User {} created savings with id {}", savings.getOwner(), savings.getId());
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.DATE, (int) (long) deposit.getDuration());
+		savings.setExpiration(calendar);
+		savings = savingsRepository.save(savings);
+		logger.info("User {} created savings with id {} and expiration date {}", savings.getOwner(), savings.getId(), savings.getExpiration());
 		return new ResponseEntity<>(savings.getId(), HttpStatus.CREATED);
 	}
 	
@@ -61,8 +67,8 @@ public class SavingsRest {
 		Long depositId = newSavings.getDepositId();
 		depositRepository.findById(depositId)
 				.orElseThrow(() -> new EntityNotFoundException(depositId, "deposit"));
-		repository.findByIdAndOwner(id, authentication.getName()).map(savings -> {
-			return repository.save(newSavings);
+		savingsRepository.findByIdAndOwner(id, authentication.getName()).map(savings -> {
+			return savingsRepository.save(newSavings);
 		}).orElseThrow(() -> new EntityNotFoundException(id, "savings"));
 		logger.info("User {} edited savings with id {}", newSavings.getOwner(), newSavings.getId());
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -72,7 +78,7 @@ public class SavingsRest {
 	public ResponseEntity<Void> deleteSavings(@PathVariable Long id, Authentication authentication){
 		String owner = authentication.getName();
 		logger.info("Deleting Savings with id {} and owner {}", id, owner);
-		repository.removeByIdAndOwner(id, owner);
+		savingsRepository.removeByIdAndOwner(id, owner);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 	

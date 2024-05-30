@@ -1,6 +1,6 @@
 package org.purple.spring.mybank.savings;
 
-import java.util.Date;
+import java.util.Calendar;
 import java.util.Objects;
 
 import jakarta.persistence.Entity;
@@ -15,13 +15,13 @@ public class Savings {
 	Long depositId;
 	Long amount;
 	String owner;
-	Date expiration;
+	Calendar expiration;
 
 	public Savings() {
 
 	}
 
-	public Savings(Long depositId, Long amount, String owner, Date expiration) {
+	public Savings(Long depositId, Long amount, String owner, Calendar expiration) {
 		super();
 		this.depositId = depositId;
 		this.amount = amount;
@@ -86,11 +86,11 @@ public class Savings {
 		this.owner = owner;
 	}
 
-	public Date getExpiration() {
+	public Calendar getExpiration() {
 		return expiration;
 	}
 
-	public void setExpiration(Date expiration) {
+	public void setExpiration(Calendar expiration) {
 		this.expiration = expiration;
 	}
 }

@@ -9,7 +9,7 @@ const DepositTable = (props) => (
 				<th width="20%">Id</th>
 				<th width="20%">Currency</th>
 				<th width="20%">Duration</th>
-				{props.permission === ROLE_ADMIN ? (<th width="20%"><div align="left">Actions</div></th>) : (<th width="20%"></th>)}
+				<th width="20%"><div align="left">Actions</div></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -23,7 +23,9 @@ const DepositTable = (props) => (
 						<td>
 							<button className="button edit" size="sm" onClick={() => window.location.href = `/deposits/edit/${deposit.id}`}>Edit deposit</button>
 							<button className="button delete" size="sm" onClick={() => props.remove(deposit.id)}>Delete deposit</button>
-						</td>) : (<td></td>)}
+						</td>) : (<td>
+							<button className="button edit" size="sm" onClick={() => window.location.href = `/savings/create/${deposit.id}`}>Create savings</button>
+						</td>)}
 				</tr>
 			))}
 		</tbody>
