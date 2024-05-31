@@ -4,8 +4,7 @@ import React, { useEffect, useState } from 'react'
 import DepositTable from './DepositTable'
 import AppNavbar from './AppNavbar'
 import "./App.css"
-import { Button, Container } from 'reactstrap'
-import { Link } from 'react-router-dom'
+import { Container } from 'reactstrap'
 import { ROLE_ADMIN } from "./Constants"
 
 const DepositList = () => {

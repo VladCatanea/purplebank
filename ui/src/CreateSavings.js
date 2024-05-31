@@ -69,7 +69,7 @@ const CreateSavings = () => {
                     <Label>Duration (in days)</Label>
                     <br />
                     <Input className="w-25"
-                        type="number"
+                        type="text"
                         name="duration"
                         value={deposit.duration}
                     />

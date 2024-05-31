@@ -46,9 +46,6 @@ const SavingsList = () => {
             <AppNavbar />
             <Container fluid>
                 <div>
-                    {/* <div className="float-end">
-                        <button className="button create" onClick={() => window.location.href = "/savings/new"}>Add savings</button>
-                    </div> */}
                     <h1>Savings List</h1>
                     <SavingsTable savings={savings} remove={remove} />
                 </div>
