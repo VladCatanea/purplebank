@@ -34,4 +34,4 @@ npm install
    ```
    npm start
    ```
-4. In browser go to  [http://localhost:3000/](http://localhost:3000/)  and log in with user **test** and password **purple**
+4. In browser go to  [http://localhost:3000/](http://localhost:3000/)  and log in with user **user** and password **password**
