@@ -12,7 +12,7 @@ const SavingsList = () => {
 
     useEffect(() => {
         setLoading(true);
-        fetch('/api/savings', { method: 'GET' })
+        fetch('/api/savings/details', { method: 'GET' })
             .then(response => response.json())
             .then(result => {
                 setSavings(result);

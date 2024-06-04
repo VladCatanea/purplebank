@@ -11,11 +11,11 @@ import jakarta.persistence.Id;
 public class Savings {
 	@Id
 	@GeneratedValue
-	Long id;
-	Long depositId;
-	Long amount;
-	String owner;
-	Calendar expiration;
+	private Long id;
+	private Long depositId;
+	private Long amount;
+	private String owner;
+	private Calendar expiration;
 
 	public Savings() {
 

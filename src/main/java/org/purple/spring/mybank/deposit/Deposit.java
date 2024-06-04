@@ -13,19 +13,30 @@ public class Deposit {
 	Long id;
 	Long duration;
 	String currency;
+	Double interestRate;
+
+	public Double getInterestRate() {
+		return interestRate;
+	}
+
+	public void setInterestRate(Double interestRate) {
+		this.interestRate = interestRate;
+	}
+
 
 	public Deposit() {
 
 	}
 
-	public Deposit(Long duration, String currency) {
+	public Deposit(Long duration, String currency, Double interestRate) {
 		this.duration = duration;
 		this.currency = currency;
+		this.interestRate = interestRate;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(currency, duration, id);
+		return Objects.hash(currency, duration, id, interestRate);
 	}
 
 	@Override
@@ -38,12 +49,13 @@ public class Deposit {
 			return false;
 		Deposit other = (Deposit) obj;
 		return Objects.equals(currency, other.currency) && Objects.equals(duration, other.duration)
-				&& Objects.equals(id, other.id);
+				&& Objects.equals(id, other.id) && Objects.equals(interestRate, other.interestRate);
 	}
 
 	@Override
 	public String toString() {
-		return "Deposit [id=" + id + ", duration=" + duration + ", currency=" + currency + "]";
+		return "Deposit [id=" + id + ", duration=" + duration + ", currency=" + currency + ", interestRate="
+				+ interestRate + "]";
 	}
 
 	public Long getId() {

@@ -9,6 +9,7 @@ const DepositTable = (props) => (
 				<th width="20%">Id</th>
 				<th width="20%">Currency</th>
 				<th width="20%">Duration</th>
+				<th width="20%"> Interest rate</th>
 				<th width="20%"><div align="left">Actions</div></th>
 			</tr>
 		</thead>
@@ -18,6 +19,7 @@ const DepositTable = (props) => (
 					<td>{deposit.id}</td>
 					<td>{deposit.currency}</td>
 					<td>{deposit.duration}</td>
+					<td>{deposit.interestRate}%</td>
 					{props.permission === ROLE_ADMIN ? (
 
 						<td>

@@ -39,7 +39,7 @@ public class DepositTest {
 
 	@Test
 	void checkCreate() throws Exception {
-		Deposit deposit = new Deposit(100L, "RON");
+		Deposit deposit = new Deposit(100L, "RON", 3.5);
 		ResponseEntity<Long> responseEntityConfirm = restTemplate.withBasicAuth(ADMIN, PASSWORD).postForEntity("/api/deposits", deposit, Long.class);
 		Long id = responseEntityConfirm.getBody();
 		deposit.setId(id);
@@ -51,7 +51,7 @@ public class DepositTest {
 
 	@Test
 	void checkUpdate() throws Exception {
-		Deposit deposit = new Deposit(200L, "RON");
+		Deposit deposit = new Deposit(200L, "RON", 20.6);
 		ResponseEntity<Long> responseEntityConfirm = restTemplate.withBasicAuth(ADMIN, PASSWORD).postForEntity("/api/deposits", deposit, Long.class);
 		Long id = responseEntityConfirm.getBody();
 		deposit.setCurrency("GBP");
@@ -66,7 +66,7 @@ public class DepositTest {
 
 	@Test
 	void checkDelete() throws Exception {
-		Deposit deposit = new Deposit(300L, "RON");
+		Deposit deposit = new Deposit(300L, "RON", 7.7);
 		ResponseEntity<Long> responseEntityConfirm = restTemplate.withBasicAuth(ADMIN, PASSWORD).postForEntity("/api/deposits", deposit, Long.class);
 		Long id = responseEntityConfirm.getBody();
 

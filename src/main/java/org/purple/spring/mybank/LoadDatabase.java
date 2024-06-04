@@ -15,8 +15,8 @@ import org.springframework.context.annotation.Configuration;
 public class LoadDatabase {
 	@Bean
 	int initDatabase(DepositRepository depositRepository, SavingsRepository savingsRepository) {
-		depositRepository.save(new Deposit(100L, "RON"));
-		depositRepository.save(new Deposit(365L, "EUR"));
+		depositRepository.save(new Deposit(100L, "RON", 3.5));
+		depositRepository.save(new Deposit(365L, "EUR", 50.0));
 		savingsRepository.save(new Savings(1L, 20L, USER, Calendar.getInstance()));
 		return 1;
 	}

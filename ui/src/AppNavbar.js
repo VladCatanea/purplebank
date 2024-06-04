@@ -14,7 +14,10 @@ const AppNavbar = () => {
       <Collapse isOpen={isOpen} navbar>
         <Nav className="justify-content-end" style={{width: "100%"}} navbar>
           <NavItem>
-            <NavLink href="http://localhost:3000/deposits">Deposits</NavLink>
+            <NavLink href="/deposits">Deposits</NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink href="/savings">Savings</NavLink>
           </NavItem>
         </Nav>
       </Collapse>

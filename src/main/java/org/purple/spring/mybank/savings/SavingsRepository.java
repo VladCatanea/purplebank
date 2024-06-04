@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import jakarta.transaction.Transactional;
 
-public interface SavingsRepository extends JpaRepository<Savings, Long> {
+public interface SavingsRepository extends JpaRepository<Savings, Long>, SavingsDetailsRepository {
 	List<Savings> findByOwner(String owner);
 	Optional<Savings> findByIdAndOwner(Long id, String owner);
 	@Transactional
