@@ -23,7 +23,7 @@ const SavingsTable = (props) => (
 						<td>{saving.interestRate}%</td>
 						<td>{saving.amount}</td>
 						<td>{saving.expiration.split("T")[0]}</td>
-						<td>{saving.expiration.split("T")[1].split(".")[0]}</td>
+						<td>{saving.expiration.split("T")[1].split(".")[0]} (UTC)</td>
 						<td>
 							<button className="button delete" size="sm" onClick={() => props.remove(saving.id)}>Delete Savings</button>
 						</td>

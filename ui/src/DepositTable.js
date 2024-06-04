@@ -6,10 +6,10 @@ const DepositTable = (props) => (
 	<Table className="mt-4">
 		<thead>
 			<tr>
-				<th width="20%">Id</th>
-				<th width="20%">Currency</th>
-				<th width="20%">Duration</th>
-				<th width="20%"> Interest rate</th>
+				<th width="10%">Id</th>
+				<th width="15%">Currency</th>
+				<th width="15%"> Interest rate</th>
+				<th width="15%">Duration</th>
 				<th width="20%"><div align="left">Actions</div></th>
 			</tr>
 		</thead>
@@ -18,8 +18,8 @@ const DepositTable = (props) => (
 				<tr key={deposit.id}>
 					<td>{deposit.id}</td>
 					<td>{deposit.currency}</td>
-					<td>{deposit.duration}</td>
 					<td>{deposit.interestRate}%</td>
+					<td>{deposit.duration}</td>
 					{props.permission === ROLE_ADMIN ? (
 
 						<td>
