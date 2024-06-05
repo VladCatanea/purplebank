@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 
 const AppNavbar = () => {
@@ -9,15 +10,15 @@ const AppNavbar = () => {
 
   return (
     <Navbar color="dark" dark expand="md">
-      <NavbarBrand href="/">Home</NavbarBrand>
+      <NavbarBrand tag={Link} to="/">Home</NavbarBrand>
       <NavbarToggler onClick={() => { setIsOpen(!isOpen) }}/>
       <Collapse isOpen={isOpen} navbar>
         <Nav className="justify-content-end" style={{width: "100%"}} navbar>
           <NavItem>
-            <NavLink href="/deposits">Deposits</NavLink>
+            <NavbarBrand tag={Link} to="/deposits">Deposits</NavbarBrand>
           </NavItem>
           <NavItem>
-            <NavLink href="/savings">Savings</NavLink>
+            <NavbarBrand tag={Link} to="/savings">Savings</NavbarBrand>
           </NavItem>
         </Nav>
       </Collapse>

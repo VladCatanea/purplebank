@@ -54,6 +54,7 @@ public class DepositRest {
 		repository.findById(id).map(deposit -> {
 			deposit.setDuration(newDeposit.getDuration());
 			deposit.setCurrency(newDeposit.getCurrency());
+			deposit.setInterestRate(newDeposit.getInterestRate());
 			return repository.save(deposit);
 		}).orElseThrow(() -> new EntityNotFoundException(id, "deposit"));
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);

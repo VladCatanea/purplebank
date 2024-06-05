@@ -7,24 +7,25 @@ import { Button, Container, Form, Input, Label } from 'reactstrap'
 import { useParams } from 'react-router-dom'
 
 
-const EditDeposit = () => {
-
+const EditDeposit = (props) => {
     const { id } = useParams();
-    const initialFormState = { id: id, currency: "", duration: 0 }
+    const initialFormState = { id: id, currency: "", duration: 0, interestRate: 0 }
     const [deposit, setDeposit] = useState(initialFormState)
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-		setLoading(true);
-		fetch(`/api/deposits/${id}`, { method: 'GET' })
-			.then(response => response.json())
-			.then(result => {
-				setDeposit(result);
-				setLoading(false);
-			})
-	}, []);
+        if (id >= 0) {
+            setLoading(true);
+            fetch(`/api/deposits/${id}`, { method: 'GET' })
+                .then(response => response.json())
+                .then(result => {
+                    setDeposit(result);
+                    setLoading(false);
+                })
+        }
+    }, []);
 
-    if (loading){
+    if (loading) {
         return (<div>Loading ...</div>)
     }
 
@@ -36,15 +37,26 @@ const EditDeposit = () => {
 
     const submitForm = async (event) => {
         event.preventDefault()
-
-        await fetch(`/api/deposits/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(deposit)
-        })
+        if (id < 0) {
+            await fetch(`/api/deposits`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(deposit)
+            })
+        }
+        else {
+            await fetch(`/api/deposits/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(deposit)
+            })
+        }
         setDeposit(initialFormState)
         window.location.href = "/deposits";
     }
@@ -65,6 +77,15 @@ const EditDeposit = () => {
                         onChange={handleInputChange}
                     />
                     <br /><br />
+                    <Label>Interest Rate</Label>
+                    <br />
+                    <Input className="w-25"
+                        type="number"
+                        name="interestRate"
+                        value={deposit.interestRate}
+                        onChange={handleInputChange}
+                    />
+                    <br /><br />
                     <Label>Duration (in days)</Label>
                     <br />
                     <Input className="w-25"
@@ -74,7 +95,7 @@ const EditDeposit = () => {
                         onChange={handleInputChange}
                     />
                     <br /><br />
-                    <Button color="primary" onClick={submitForm}>Edit deposit</Button>
+                    <Button color="primary" onClick={submitForm}>{id < 0 ? (<div>Create Deposit</div>) : (<div>Edit deposit</div>)}</Button>
                 </Form>
             </Container>
         </div>
