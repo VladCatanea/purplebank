@@ -1,7 +1,7 @@
 
 # ****Full stack development with Spring Boot, React****
 
-This application shows how to build a full stack application from the ground up and make use of very import concepts used in real live software development:
+This application shows how to build a full stack application from the ground up and make use of very important concepts used in real life software development:
 
 -   Spring Boot Backend Rest API
 -   Spring Security
