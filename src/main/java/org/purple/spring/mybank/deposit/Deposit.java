@@ -10,10 +10,10 @@ import jakarta.persistence.Id;
 public class Deposit {
 	@Id
 	@GeneratedValue
-	Long id;
-	Long duration;
-	String currency;
-	Double interestRate;
+	private Long id;
+	private Long duration;
+	private String currency;
+	private Double interestRate;
 
 	public Double getInterestRate() {
 		return interestRate;

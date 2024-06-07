@@ -21,14 +21,14 @@ public class StatusTest {
 
 	@Test
 	void checkAStatus() throws Exception {
-		AppStatus testStatus = restTemplate.withBasicAuth(USER, PASSWORD).getForObject("/status", AppStatus.class);
+		AppStatus testStatus = restTemplate.withBasicAuth(USER, PASSWORD).getForObject("/api/status", AppStatus.class);
 		assertThat(testStatus.requestsCount()).isEqualTo(1);
 		assertThat(testStatus.status()).isEqualTo("yellow");
 	}
 	
 	@Test
 	void checkBIncrement() throws Exception {
-		AppStatus testStatus = restTemplate.withBasicAuth(USER, PASSWORD).getForObject("/status", AppStatus.class);
+		AppStatus testStatus = restTemplate.withBasicAuth(USER, PASSWORD).getForObject("/api/status", AppStatus.class);
 		assertThat(testStatus.requestsCount()).isEqualTo(2);
 		assertThat(testStatus.status()).isEqualTo("yellow");
 	}

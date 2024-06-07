@@ -6,4 +6,6 @@ public class Constants {
 	public static final String PASSWORD = "password";
 	
 	public static final String ADMIN = "admin";
+	
+	public static final String BASE_API = "/api";
 }

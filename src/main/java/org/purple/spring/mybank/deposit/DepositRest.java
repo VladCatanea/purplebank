@@ -1,6 +1,7 @@
 package org.purple.spring.mybank.deposit;
 
 import java.util.List;
+import static org.purple.spring.mybank.Constants.BASE_API;
 
 import org.purple.spring.mybank.errors.EntityNotFoundException;
 import org.slf4j.Logger;
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping(BASE_API + "/deposits")
 public class DepositRest {
 	private final DepositRepository repository;
 	private Logger logger = LoggerFactory.getLogger(getClass());
@@ -25,13 +28,13 @@ public class DepositRest {
 		this.repository = repository;
 	}
 	
-	@GetMapping(value = "/api/deposits", produces = "application/json")
+	@GetMapping
 	public ResponseEntity<List<Deposit>> listDeposits() {
 		logger.info("Returning list of all deposits");
 		return new ResponseEntity<>(repository.findAll(), HttpStatus.FOUND);
 	}
 
-	@GetMapping("/api/deposits/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<Deposit> getDeposit(@PathVariable Long id) {
 		logger.info("Searching for deposit with id {}", id);
 		Deposit deposit = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, "deposit"));
@@ -40,7 +43,7 @@ public class DepositRest {
 	}
 	
 	@Secured("ROLE_ADMIN")
-	@PostMapping(value = "/api/deposits", consumes = "application/json", produces = "application/json")
+	@PostMapping
 	public ResponseEntity<Long> createDeposit(@RequestBody Deposit deposit) {
 		deposit = repository.save(deposit);
 		logger.info("Created deposit with id {}", deposit.getId());
@@ -48,7 +51,7 @@ public class DepositRest {
 	}
 	
 	@Secured("ROLE_ADMIN")
-	@PutMapping(value = "/api/deposits/{id}", consumes = "application/json", produces = "application/json")
+	@PutMapping(value = "/{id}")
 	public ResponseEntity<Void> updateDeposit(@RequestBody Deposit newDeposit, @PathVariable Long id) {
 		logger.info("Updating deposit with id {}", id);
 		repository.findById(id).map(deposit -> {
@@ -61,7 +64,7 @@ public class DepositRest {
 	}
 	
 	@Secured("ROLE_ADMIN")
-	@DeleteMapping(value = "/api/deposits/{id}")
+	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Void> deleteDeposit(@PathVariable Long id) {
 		logger.info("Deleting deposit with id {}", id);
 		repository.deleteById(id);
