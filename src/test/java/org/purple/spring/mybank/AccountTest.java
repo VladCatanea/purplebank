@@ -27,6 +27,6 @@ public class AccountTest {
 		 ResponseEntity<Account[]> response = restTemplate.withBasicAuth(USER, PASSWORD).getForEntity(BASE_API + "/account", Account[].class);
 		 assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FOUND);
 		 Account[] accountList = response.getBody();
-		 assertThat(accountList[0].getIban()).isEqualTo("1");
+		 assertThat(accountList[0].getIban()).isEqualTo("RO66BACX0000001234567890");
 	}
 }
