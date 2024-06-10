@@ -16,7 +16,7 @@ public class UserPermissionRest {
 	@GetMapping(value = "/api/permission", produces = "application/json")
 	public ResponseEntity<Permission> getPermission(Authentication authentication) {
 		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-		logger.info("Returning user permission: {}", userDetails);	
+		logger.debug("Returning user permission: {}", userDetails);	
 		Boolean adminPermission = userDetails != null && userDetails.getAuthorities().stream()
 			      .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
 		Permission permission = new Permission();

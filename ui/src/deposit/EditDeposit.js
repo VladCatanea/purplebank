@@ -1,10 +1,10 @@
 "use client"
 
 import React, { useEffect, useState } from 'react'
-import AppNavbar from './AppNavbar'
-import "./App.css"
+import AppNavbar from '../app/AppNavbar'
+import "../app/App.css"
 import { Button, Container, Form, Input, Label } from 'reactstrap'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 
 const EditDeposit = (props) => {
@@ -12,6 +12,7 @@ const EditDeposit = (props) => {
     const initialFormState = { id: id, currency: "", duration: 0, interestRate: 0 }
     const [deposit, setDeposit] = useState(initialFormState)
     const [loading, setLoading] = useState(false)
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (id >= 0) {
@@ -58,7 +59,7 @@ const EditDeposit = (props) => {
             })
         }
         setDeposit(initialFormState)
-        window.location.href = "/deposits";
+        navigate("/deposits");
     }
 
     return (
@@ -95,7 +96,7 @@ const EditDeposit = (props) => {
                         onChange={handleInputChange}
                     />
                     <br /><br />
-                    <Button color="primary" onClick={submitForm}>{id < 0 ? (<div>Create Deposit</div>) : (<div>Edit deposit</div>)}</Button>
+                    <Button color="primary" onClick={submitForm}>{id < 0 ? (<div>Create Deposit</div>) : (<div>Save deposit</div>)}</Button>
                 </Form>
             </Container>
         </div>

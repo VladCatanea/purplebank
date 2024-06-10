@@ -20,6 +20,9 @@ const AppNavbar = () => {
           <NavItem>
             <NavbarBrand tag={Link} to="/savings">Savings</NavbarBrand>
           </NavItem>
+          <NavItem>
+            <NavbarBrand tag={Link} to="/accounts">Accounts</NavbarBrand>
+          </NavItem>
         </Nav>
       </Collapse>
     </Navbar>

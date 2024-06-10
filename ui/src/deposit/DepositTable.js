@@ -1,8 +1,11 @@
 import React from 'react'
 import { Table } from 'reactstrap'
-import { ROLE_ADMIN } from "./Constants"
+import { ROLE_ADMIN } from "../app/Constants"
+import { useNavigate } from 'react-router-dom'
 
-const DepositTable = (props) => (
+const DepositTable = (props) => {
+	const navigate = useNavigate()
+	return(
 	<Table className="mt-4">
 		<thead>
 			<tr>
@@ -23,15 +26,15 @@ const DepositTable = (props) => (
 					{props.permission === ROLE_ADMIN ? (
 
 						<td>
-							<button className="button edit" size="sm" onClick={() => window.location.href = `/deposits/edit/${deposit.id}`}>Edit deposit</button>
-							<button className="button delete" size="sm" onClick={() => props.remove(deposit.id)}>Delete deposit</button>
+							<button className="button edit" size="sm" onClick={() => navigate(`/deposits/edit/${deposit.id}`)}>Edit</button>
+							<button className="button delete" size="sm" onClick={() => props.remove(deposit.id)}>Delete</button>
 						</td>) : (<td>
-							<button className="button edit" size="sm" onClick={() => window.location.href = `/savings/create/${deposit.id}`}>Create savings</button>
+							<button className="button edit" size="sm" onClick={() => navigate(`/savings/create/${deposit.id}`)}>Create savings</button>
 						</td>)}
 				</tr>
 			))}
 		</tbody>
 	</Table>
 )
-
+}
 export default DepositTable

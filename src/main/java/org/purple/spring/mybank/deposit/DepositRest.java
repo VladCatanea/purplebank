@@ -30,15 +30,16 @@ public class DepositRest {
 	
 	@GetMapping
 	public ResponseEntity<List<Deposit>> listDeposits() {
-		logger.info("Returning list of all deposits");
-		return new ResponseEntity<>(repository.findAll(), HttpStatus.FOUND);
+		List<Deposit> depositList = repository.findAll();
+		logger.debug("Returning list of all deposits: {}", depositList);
+		return new ResponseEntity<>(depositList, HttpStatus.FOUND);
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Deposit> getDeposit(@PathVariable Long id) {
-		logger.info("Searching for deposit with id {}", id);
+		logger.debug("Searching for deposit with id {}", id);
 		Deposit deposit = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id, "deposit"));
-		logger.info("Returning deposit with id {}", id);
+		logger.debug("Returning deposit {}", deposit);
 		return new ResponseEntity<>(deposit, HttpStatus.FOUND);
 	}
 	
@@ -46,14 +47,14 @@ public class DepositRest {
 	@PostMapping
 	public ResponseEntity<Long> createDeposit(@RequestBody Deposit deposit) {
 		deposit = repository.save(deposit);
-		logger.info("Created deposit with id {}", deposit.getId());
+		logger.debug("Created deposit {}", deposit);
 		return new ResponseEntity<>(deposit.getId(), HttpStatus.CREATED);
 	}
 	
 	@Secured("ROLE_ADMIN")
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<Void> updateDeposit(@RequestBody Deposit newDeposit, @PathVariable Long id) {
-		logger.info("Updating deposit with id {}", id);
+		logger.debug("Updating deposit: {}", newDeposit);
 		repository.findById(id).map(deposit -> {
 			deposit.setDuration(newDeposit.getDuration());
 			deposit.setCurrency(newDeposit.getCurrency());
@@ -66,7 +67,7 @@ public class DepositRest {
 	@Secured("ROLE_ADMIN")
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Void> deleteDeposit(@PathVariable Long id) {
-		logger.info("Deleting deposit with id {}", id);
+		logger.debug("Deleting deposit with id {}", id);
 		repository.deleteById(id);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

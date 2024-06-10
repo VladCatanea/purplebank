@@ -1,10 +1,10 @@
 "use client"
 
 import React, { useEffect, useState } from 'react'
-import AppNavbar from './AppNavbar'
-import "./App.css"
+import AppNavbar from '../app/AppNavbar'
+import "../app/App.css"
 import { Button, Container, Form, Input, Label } from 'reactstrap'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 
 const CreateSavings = () => {
@@ -15,6 +15,7 @@ const CreateSavings = () => {
     const [savings, setSavings] = useState(initialSavingsState)
     const [deposit, setDeposit] = useState(initialDepositState)
     const [loading, setLoading] = useState(false)
+    const navigate = useNavigate()
 
     useEffect(() => {
         setLoading(true);
@@ -48,7 +49,7 @@ const CreateSavings = () => {
             body: JSON.stringify(savings)
         })
         setSavings(initialSavingsState)
-        window.location.href = "/savings";
+        navigate("/savings");
     }
 
     return (

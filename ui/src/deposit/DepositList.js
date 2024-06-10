@@ -2,15 +2,17 @@
 
 import React, { useEffect, useState } from 'react'
 import DepositTable from './DepositTable'
-import AppNavbar from './AppNavbar'
-import "./App.css"
+import AppNavbar from '../app/AppNavbar'
+import "../app/App.css"
 import { Container } from 'reactstrap'
-import { ROLE_ADMIN } from "./Constants"
+import { ROLE_ADMIN } from "../app/Constants"
+import { useNavigate } from 'react-router-dom'
 
 const DepositList = () => {
 	const [deposits, setDeposits] = useState([])
 	const [loading, setLoading] = useState(false);
 	const [permission, setPermission] = useState("");
+	const navigate = useNavigate()
 
 	useEffect(() => {
 		setLoading(true);
@@ -60,7 +62,7 @@ const DepositList = () => {
 				<div>
 					{
 						permission === ROLE_ADMIN ? (<div className="float-end">
-							<button className="button create" onClick={() => window.location.href ="/deposits/edit/-1"}>Add Deposit</button> </div>)
+							<button className="button create" onClick={() => navigate("/deposits/edit/-1")}>Add Deposit</button> </div>)
 							: (null)
 					}
 					<h1>Deposit List</h1>

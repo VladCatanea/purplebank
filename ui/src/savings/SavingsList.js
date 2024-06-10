@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from 'react'
 import SavingsTable from './SavingsTable'
-import AppNavbar from './AppNavbar'
-import "./App.css"
+import AppNavbar from '../app/AppNavbar'
+import "../app/App.css"
 import { Container } from 'reactstrap'
 
 const SavingsList = () => {

@@ -1,15 +1,15 @@
 package org.purple.spring.mybank.savings;
 
+import static org.purple.spring.mybank.Constants.BASE_API;
+
 import java.util.Calendar;
 import java.util.List;
 
 import org.purple.spring.mybank.deposit.Deposit;
 import org.purple.spring.mybank.deposit.DepositRepository;
 import org.purple.spring.mybank.errors.EntityNotFoundException;
-import static org.purple.spring.mybank.Constants.BASE_API;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -25,9 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(BASE_API + "/savings")
 public class SavingsRest {
-	@Autowired
 	private final SavingsRepository savingsRepository;
-	@Autowired
 	private final DepositRepository depositRepository;
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -39,16 +37,18 @@ public class SavingsRest {
 	@GetMapping
 	public ResponseEntity<List<Savings>> listSavings(Authentication authentication) {
 		String username = authentication.getName();
+		logger.debug("Returning list of all savings for user {}", username);
 		List<Savings> savingsList = savingsRepository.findByOwner(username);
-		logger.debug("Returning list of all savings: {}", savingsList);
+		logger.debug("List of all savings: {}", savingsList);
 		return new ResponseEntity<>(savingsList, HttpStatus.FOUND);
 	}
 	
 	@GetMapping(value = "/details")
 	public ResponseEntity<List<SavingsDetails>> listSavingsDetails(Authentication authentication) {
 		String username = authentication.getName();
+		logger.debug("Returning list of all savings for user {}", username);
 		List<SavingsDetails> savingsList = savingsRepository.findDetailsByOwner(username);
-		logger.debug("Returning list of all savings details: {}", savingsList);
+		logger.debug("List of all savings details: {}", savingsList);
 		return new ResponseEntity<>(savingsList, HttpStatus.FOUND);
 	}
 
@@ -62,7 +62,7 @@ public class SavingsRest {
 
 	@PostMapping
 	public ResponseEntity<Long> createSavings(@RequestBody Savings savings, Authentication authentication) {
-		logger.debug("User attempts to create deposit");
+		logger.debug("User {} attempts to create deposit", authentication.getName());
 		savings.setOwner(authentication.getName());
 		Long depositId = savings.getDepositId();
 		Deposit deposit = depositRepository.findById(savings.getDepositId())
