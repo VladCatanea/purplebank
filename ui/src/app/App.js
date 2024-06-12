@@ -8,6 +8,7 @@ import EditDeposit from "../deposit/EditDeposit"
 import CreateSavings from "../savings/CreateSavings"
 import SavingsList from "../savings/SavingsList"
 import AccountsList from "../account/AccountList"
+import TransactionUpload from "../transactions/TransactionUpload"
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
         <Route path='/savings/create/:id' element={<CreateSavings/>}/>
         <Route path='/savings' exact={true} element={<SavingsList/>}/>
         <Route path='/accounts' exact={true} element={<AccountsList/>}/>
+        <Route path='/transactions' exact={true} element={<TransactionUpload/>}/>
       </Routes>
     </Router>
   )

@@ -11,4 +11,10 @@ public class Permission {
 		this.permission = permission;
 	}
 
+	@Override
+	public String toString() {
+		return "Permission [permission=" + permission + "]";
+	}
+	
+	
 }
