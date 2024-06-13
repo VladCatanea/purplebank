@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 
+import org.purple.spring.mybank.errors.TransactionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -24,7 +25,7 @@ public class FileSystemStorageService implements StorageService {
 	@Autowired
 	public FileSystemStorageService(StorageProperties properties) {
 		if(properties.getLocation().trim().length() == 0) {
-			throw new StorageException("File upload location cannot be empty");
+			throw new TransactionException("File upload location cannot be empty");
 		}
 		this.rootLocation = Paths.get(properties.getLocation());
 	}
@@ -33,18 +34,18 @@ public class FileSystemStorageService implements StorageService {
 	public void store(MultipartFile file) {
 		try {
 			if (file.isEmpty()) {
-				throw new StorageException("File is empty");
+				throw new TransactionException("File is empty");
 			}
 			Path destinationFile = rootLocation.resolve(Paths.get(file.getOriginalFilename())).normalize()
 					.toAbsolutePath();
 			if (!destinationFile.getParent().equals(rootLocation.toAbsolutePath())) {
-				throw new StorageException("Cannot store file outside current directory");
+				throw new TransactionException("Cannot store file outside current directory");
 			}
 			try (InputStream inputStream = file.getInputStream()) {
 				Files.copy(inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING);
 			}
 		} catch (IOException e) {
-			throw new StorageException("Failed to store file", e);
+			throw new TransactionException("Failed to store file", e);
 		}
 	}
 
@@ -53,7 +54,7 @@ public class FileSystemStorageService implements StorageService {
 		try {
 			return Files.walk(rootLocation, 1).filter(path -> !path.equals(rootLocation)).map(rootLocation::relativize);
 		} catch (IOException e) {
-			throw new StorageException("Failed to read stored files", e);
+			throw new TransactionException("Failed to read stored files", e);
 		}
 	}
 
@@ -70,7 +71,7 @@ public class FileSystemStorageService implements StorageService {
 			if (resource.exists() && resource.isReadable()) {
 				return resource;
 			} else {
-				throw new StorageFileNotFoundException("Could not read file: " + filename);
+				throw new StorageFileNotFoundException("Could not read file: " + file);
 			}
 		} catch (MalformedURLException e) {
 			throw new StorageFileNotFoundException("Could not read file: " + filename, e);
@@ -88,7 +89,7 @@ public class FileSystemStorageService implements StorageService {
 			Files.createDirectories(rootLocation);
 		}
 		catch (IOException e) {
-			throw new StorageException("Could not initialize storage", e);
+			throw new TransactionException("Could not initialize storage", e);
 		}
 	}
 

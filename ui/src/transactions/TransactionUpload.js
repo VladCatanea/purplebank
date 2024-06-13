@@ -1,12 +1,30 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Container, Form, Input, Label } from 'reactstrap';
 import AppNavBar from '../app/AppNavbar'
+import { ROLE_ADMIN } from '../app/Constants';
 
 const TransactionUpload = () => {
   const [file, setFile] = useState();
   const [isSelected, setIsSelected] = useState(false);
   const [successMessage, setSuccessMessage] = useState("")
 
+
+  const [permission, setPermission] = useState()
+
+	useEffect( () => {
+		fetch("/api/permission", {method: "GET"})
+		.then(response => response.json())
+		.then(result => {
+			setPermission(result.permission)
+		})
+	}, [])
+
+  if (permission !== ROLE_ADMIN){
+    return (<div>
+      <AppNavBar/>
+      <div>Only admin user allowed on this page</div>
+    </div>)
+  }
 
   const handleInputChange = (event) => {
 

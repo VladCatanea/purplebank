@@ -34,7 +34,7 @@ public class LoadDatabase implements ApplicationRunner {
 		savingsRepository.save(new Savings(1L, 20L, USER, Calendar.getInstance()));
 		accountRepository.save(new Account("RON", 20L, "RO66BACX0000001234567890", "1900103417536", "Dorel Popescu", Calendar.getInstance(), "Bucuresti, Romania", "+40393020391", USER));
 		accountRepository.save(new Account("GBP", 100L, "GB33BUKB20201555555555", "1900103417536", "Dorel Popescu", Calendar.getInstance(), "Bucuresti, Romania", "+40393020391", USER));
-		StorageService.deleteAll();
+		accountRepository.save(new Account("RON", 100L, "RO66BACX0000005274537285", "1900103417536", "Dorel Popescu", Calendar.getInstance(), "Bucuresti, Romania", "+40393020391", USER));
 		StorageService.init();
 	}
 }

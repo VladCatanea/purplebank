@@ -1,6 +1,8 @@
 package org.purple.spring.mybank.transactions;
 
-public class StorageFileNotFoundException extends StorageException {
+import org.purple.spring.mybank.errors.TransactionException;
+
+public class StorageFileNotFoundException extends TransactionException {
 	/**
 	 * 
 	 */

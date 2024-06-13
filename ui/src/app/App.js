@@ -9,6 +9,7 @@ import CreateSavings from "../savings/CreateSavings"
 import SavingsList from "../savings/SavingsList"
 import AccountsList from "../account/AccountList"
 import TransactionUpload from "../transactions/TransactionUpload"
+import TransactionHistory from "../transactions/TransactionHistory"
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
         <Route path='/savings' exact={true} element={<SavingsList/>}/>
         <Route path='/accounts' exact={true} element={<AccountsList/>}/>
         <Route path='/transactions' exact={true} element={<TransactionUpload/>}/>
+        <Route path='/transaction/history' exact={true} element={<TransactionHistory/>}/>
       </Routes>
     </Router>
   )

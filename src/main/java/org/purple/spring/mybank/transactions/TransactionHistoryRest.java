@@ -7,24 +7,26 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-@Controller
+@RestController
 @RequestMapping(BASE_API + "/transactions")
-public class FileUploadController {
+public class TransactionHistoryRest {
 //	private final StorageService storageService;
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	private final TransactionHistoryRepository transactionHistoryRepository;
 	
 	@Autowired
-	public FileUploadController(StorageService storageService, TransactionHistoryRepository transactionHistoryRepository) {
+	public TransactionHistoryRest(StorageService storageService, TransactionHistoryRepository transactionHistoryRepository) {
 //		this.storageService = storageService;
 		this.transactionHistoryRepository = transactionHistoryRepository;
 	}
@@ -39,6 +41,14 @@ public class FileUploadController {
 		logger.debug("Processed {} transactions: {}", transactionsProcessed, transactionList);
 		transactionHistoryRepository.saveAll(transactionList);
 		return new ResponseEntity<>(transactionsProcessed, HttpStatus.CREATED);
+	}
+	
+	@Secured("ROLE_ADMIN")
+	@GetMapping
+	public ResponseEntity<List<Transaction>> getTransationHistory() {
+		List<Transaction> transactionList = transactionHistoryRepository.findAllByOrderByTransactionDateAsc(PageRequest.of(0, 2));
+		logger.debug("Returning list of all transactions: {}", transactionList);
+		return new ResponseEntity<>(transactionList, HttpStatus.FOUND);
 	}
 
 }

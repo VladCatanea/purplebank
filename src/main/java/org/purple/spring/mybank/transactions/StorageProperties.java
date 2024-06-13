@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class StorageProperties {
 	
-	private String location = "upload-dir";
+	private String location = "C:\\learn_java\\git\\purplebank\\src\\test\\resources";
 
 	public String getLocation() {
 		return location;

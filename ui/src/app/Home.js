@@ -17,7 +17,7 @@ const Home = () => {
 		.then(result => {
 			setPermission(result.permission)
 		})
-	})
+	}, [])
 
 	return (
 		<div>
@@ -25,7 +25,11 @@ const Home = () => {
 			<div className="container">
 				<h1>Purple Bank</h1>
 				<br/>
-				{permission === ROLE_ADMIN ? (<Button color="primary" tag={Link} to='/transactions'>Upload transactions file</Button>) : (<div>Hello !</div>)}
+				{permission === ROLE_ADMIN ? (<div>
+					<Button color="primary" tag={Link} to='/transactions'>Upload transactions file</Button>
+					<br/><br/>
+					<Button color="primary" tag={Link} to='/transaction/history'>View transaction history</Button>
+					</div>) : (<div>Hello !</div>)}
 			</div>
 		</div>
 	)

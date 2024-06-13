@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 
+import org.purple.spring.mybank.errors.TransactionException;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -27,15 +28,13 @@ public class Utils {
 
 			// process JSON
 			ObjectMapper objectMapper = new ObjectMapper();
-			JsonNode jsonNode = objectMapper.readTree(sb.toString());
-			JsonNode transactionListJsonNode = jsonNode.get("transactions");
-			List<Transaction> transactionList = objectMapper.readValue(transactionListJsonNode.traverse(),
+			List<Transaction> transactionList = objectMapper.readValue(sb.toString(),
 					new TypeReference<List<Transaction>>() {
 					});
 			return transactionList;
 
 		} catch (IOException e) {
-			throw new StorageException("Failed to read file", e);
+			throw new TransactionException("Failed to read file", e);
 		}
 	}
 
