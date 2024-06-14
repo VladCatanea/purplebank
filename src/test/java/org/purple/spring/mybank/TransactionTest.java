@@ -5,6 +5,8 @@ import static org.purple.spring.mybank.Constants.ADMIN;
 import static org.purple.spring.mybank.Constants.BASE_API;
 import static org.purple.spring.mybank.Constants.PASSWORD;
 
+import java.io.File;
+
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -33,7 +35,10 @@ public class TransactionTest {
 	String url = BASE_API + "/transactions";
 	
 	ResponseEntity<Integer> uploadTransactions(String filename){
-		Resource file = storageService.loadAsResource(filename);
+		ClassLoader classLoader = getClass().getClassLoader();
+		File filepath = new File(classLoader.getResource(filename).getFile());
+		String absolutePath = filepath.getAbsolutePath();
+		Resource file = storageService.loadAsResource(absolutePath);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 		MultiValueMap<String, Object> body
