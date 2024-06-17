@@ -5,17 +5,15 @@ import static org.purple.spring.mybank.Constants.ADMIN;
 import static org.purple.spring.mybank.Constants.BASE_API;
 import static org.purple.spring.mybank.Constants.PASSWORD;
 
-import java.io.File;
-
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.purple.spring.mybank.transactions.StorageService;
 import org.purple.spring.mybank.transactions.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -30,15 +28,10 @@ import org.springframework.util.MultiValueMap;
 public class TransactionTest {
 	@Autowired
 	TestRestTemplate restTemplate;
-	@Autowired
-	StorageService storageService;
 	String url = BASE_API + "/transactions";
 	
 	ResponseEntity<Integer> uploadTransactions(String filename){
-		ClassLoader classLoader = getClass().getClassLoader();
-		File filepath = new File(classLoader.getResource(filename).getFile());
-		String absolutePath = filepath.getAbsolutePath();
-		Resource file = storageService.loadAsResource(absolutePath);
+		Resource file = new ClassPathResource(filename, this.getClass().getClassLoader());
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 		MultiValueMap<String, Object> body
@@ -52,6 +45,13 @@ public class TransactionTest {
 	@Test
 	void jsonCreateTest() {
 		ResponseEntity<Integer> response = uploadTransactions("transactions_test_files/transactions.json");
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+		assertThat(response.getBody()).isEqualTo(3);
+	}
+	
+	@Test 
+	void csvCreateTest() {
+		ResponseEntity<Integer> response = uploadTransactions("transactions_test_files/transactions.csv");
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 		assertThat(response.getBody()).isEqualTo(3);
 	}
