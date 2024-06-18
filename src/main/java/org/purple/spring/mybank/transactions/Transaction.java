@@ -8,20 +8,20 @@ import jakarta.persistence.Id;
 @Entity
 public class Transaction {
 	@Id
-	String referenceNum;
-	String receiverIban;
-	String senderIban;
-	String senderName;
-	String transactionDate;
-	String authorizationCode = null; //optional
-	Long debitAmount;
-	Long creditAmount;
-	
-	
+	private String referenceNum;
+	private String receiverIban;
+	private String senderIban;
+	private String senderName;
+	private String transactionDate;
+	private String authorizationCode = null; // optional
+	private Long debitAmount;
+	private Long creditAmount;
+	private String status;
+
 	public Transaction() {
 		super();
 	}
-	
+
 	public Transaction(String referenceNum, String receiverIban, String senderIban, String senderName,
 			String transactionDate, Long debitAmount, Long creditAmount) {
 		super();
@@ -33,9 +33,6 @@ public class Transaction {
 		this.debitAmount = debitAmount;
 		this.creditAmount = creditAmount;
 	}
-
-
-
 
 	public Transaction(String referenceNum, String receiverIban, String senderIban, String senderName,
 			String transactionDate, String authorizationCode, Long debitAmount, Long creditAmount) {
@@ -50,129 +47,83 @@ public class Transaction {
 		this.creditAmount = creditAmount;
 	}
 
-
-
-
 	public String getReferenceNum() {
 		return referenceNum;
 	}
-
-
-
 
 	public void setReferenceNum(String referenceNum) {
 		this.referenceNum = referenceNum;
 	}
 
-
-
-
 	public String getReceiverIban() {
 		return receiverIban;
 	}
-
-
-
 
 	public void setReceiverIban(String receiverIban) {
 		this.receiverIban = receiverIban;
 	}
 
-
-
-
 	public String getSenderIban() {
 		return senderIban;
 	}
-
-
-
 
 	public void setSenderIban(String senderIban) {
 		this.senderIban = senderIban;
 	}
 
-
-
-
 	public String getSenderName() {
 		return senderName;
 	}
-
-
-
 
 	public void setSenderName(String senderName) {
 		this.senderName = senderName;
 	}
 
-
-
-
 	public String getTransactionDate() {
 		return transactionDate;
 	}
-
-
-
 
 	public void setTransactionDate(String transactionDate) {
 		this.transactionDate = transactionDate;
 	}
 
-
-
-
 	public String getAuthorizationCode() {
 		return authorizationCode;
 	}
-
-
-
 
 	public void setAuthorizationCode(String authorizationCode) {
 		this.authorizationCode = authorizationCode;
 	}
 
-
-
-
 	public Long getDebitAmount() {
 		return debitAmount;
 	}
-
-
-
 
 	public void setDebitAmount(Long debitAmount) {
 		this.debitAmount = debitAmount;
 	}
 
-
-
-
 	public Long getCreditAmount() {
 		return creditAmount;
 	}
-
-
-
 
 	public void setCreditAmount(Long creditAmount) {
 		this.creditAmount = creditAmount;
 	}
 
+	public String getStatus() {
+		return status;
+	}
 
-
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
 	@Override
 	public int hashCode() {
 		return Objects.hash(authorizationCode, creditAmount, debitAmount, receiverIban, referenceNum, senderIban,
 				senderName, transactionDate);
 	}
-
-
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -190,9 +141,6 @@ public class Transaction {
 				&& Objects.equals(transactionDate, other.transactionDate);
 	}
 
-
-
-
 	@Override
 	public String toString() {
 		return "Transaction [referenceNum=" + referenceNum + ", receiverIban=" + receiverIban + ", senderIban="
@@ -200,6 +148,5 @@ public class Transaction {
 				+ ", authorizationCode=" + authorizationCode + ", debitAmount=" + debitAmount + ", creditAmount="
 				+ creditAmount + "]";
 	}
-	
-	
+
 }

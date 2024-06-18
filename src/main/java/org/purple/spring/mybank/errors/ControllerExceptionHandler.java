@@ -19,7 +19,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler{
 	protected ResponseEntity<Object> handleEntityNotFoundError(
 		      EntityNotFoundException ex, WebRequest request)
 	{
-		logger.error("Could not find entity of type {} and id {}", ex.getType(), ex.getId(), ex);
+		logger.error("Could not find entity of type {} and id {} {}", ex.getType(), ex.getId(), ex.getStringId(), ex);
         return handleExceptionInternal(ex, null, 
           new HttpHeaders(), HttpStatus.NOT_FOUND, request);
 	}

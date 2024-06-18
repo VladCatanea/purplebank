@@ -24,10 +24,12 @@ import org.springframework.web.multipart.MultipartFile;
 public class TransactionHistoryRest {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	private final TransactionHistoryRepository transactionHistoryRepository;
+	private final TransactionService transactionService;
 
 	@Autowired
-	public TransactionHistoryRest(TransactionHistoryRepository transactionHistoryRepository) {
+	public TransactionHistoryRest(TransactionHistoryRepository transactionHistoryRepository, TransactionService transactionService) {
 		this.transactionHistoryRepository = transactionHistoryRepository;
+		this.transactionService = transactionService;
 	}
 
 	@Secured("ROLE_ADMIN")
@@ -35,16 +37,12 @@ public class TransactionHistoryRest {
 	public ResponseEntity<Integer> handleFileUpload(@RequestParam("file") MultipartFile file) {
 		logger.debug("Uploading file");
 		String extension = Utils.getFileExtension(file.getOriginalFilename());
-		List<Transaction> transactionList;
 		Integer transactionsProcessed;
 		if (extension.equals(".json")) {
-			transactionList = Utils.processJSON(file);
-			transactionsProcessed = transactionList.size();
-			logger.debug("Processed {} transactions: {}", transactionsProcessed, transactionList);
-			transactionHistoryRepository.saveAll(transactionList);
+			transactionsProcessed = transactionService.processJSON(file);
 		} else {
 			if (extension.equals(".csv")) {
-				transactionsProcessed = Utils.processCSV(file, transactionHistoryRepository, logger);
+				transactionsProcessed = transactionService.processCSV(file);
 			} else {
 				throw new TransactionException("File extension '" + extension + "' incorrect");
 			}
