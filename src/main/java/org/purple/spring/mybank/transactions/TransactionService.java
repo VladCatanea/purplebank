@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 
+import org.purple.spring.mybank.account.Account;
 import org.purple.spring.mybank.account.AccountRepository;
 import org.purple.spring.mybank.errors.EntityNotFoundException;
 import org.purple.spring.mybank.errors.TransactionException;
@@ -37,16 +38,18 @@ public class TransactionService {
 	private TransactionAssignedRepository transactionAssignedRepository;
 
 	public String validateTransaction(Transaction transaction) {
-		try {
-			accountRepository.findById(transaction.getReceiverIban())
-					.orElseThrow(() -> new EntityNotFoundException(transaction.getReceiverIban(), "account"));
-			accountRepository.findById(transaction.getSenderIban())
-					.orElseThrow(() -> new EntityNotFoundException(transaction.getReceiverIban(), "account"));
-			transactionAssignedRepository.save(transaction);
-			return "ASSIGNED";
-		} catch (EntityNotFoundException e) {
+		if(!accountRepository.findById(transaction.getReceiverIban()).isPresent()) {
 			return "ERROR";
 		}
+		Account account = accountRepository.findById(transaction.getReceiverIban()).get();
+		Long newAmount = account.getAmount() + transaction.getDebitAmount() - transaction.getCreditAmount();
+		if (newAmount < 0) {
+			return "Error";
+		}
+		account.setAmount(newAmount);
+		accountRepository.save(account);
+		transactionAssignedRepository.save(new ATransaction(transaction));
+		return "ASSIGNED";
 	}
 
 	public int processJSON(MultipartFile file) {

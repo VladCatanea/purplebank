@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.purple.spring.mybank.account.AccountRepository;
 import org.purple.spring.mybank.errors.EntityNotFoundException;
-import org.purple.spring.mybank.transactions.Transaction;
+import org.purple.spring.mybank.transactions.ATransaction;
 import org.purple.spring.mybank.transactions.TransactionAssignedRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,12 +31,12 @@ public class AccountTransactionRest {
 		this.accountRepository = accountRepository;
 	}
 	
-	@GetMapping("/{senderIban}")
-	public ResponseEntity<List<Transaction>> getTransactions(@PathVariable String senderIban, Authentication authentication){
+	@GetMapping("/{receiverIban}")
+	public ResponseEntity<List<ATransaction>> getTransactions(@PathVariable String receiverIban, Authentication authentication){
 		String username = authentication.getName();
-		logger.debug("Searching transaction list for username {} and account {}", username, senderIban);
-		accountRepository.findByIbanAndOwner(senderIban, username).orElseThrow(() -> new EntityNotFoundException(senderIban, "Account"));
-		List<Transaction> transactionList = transactionsRepository.findBySenderIban(senderIban);
+		logger.debug("Searching transaction list for username {} and account {}", username, receiverIban);
+		accountRepository.findByIbanAndOwner(receiverIban, username).orElseThrow(() -> new EntityNotFoundException(receiverIban, "Account"));
+		List<ATransaction> transactionList = transactionsRepository.findByReceiverIban(receiverIban);
 		logger.debug("Returning transaction list: {}", transactionList);
 		return new ResponseEntity<>(transactionList, HttpStatus.FOUND);
 	}

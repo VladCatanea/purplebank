@@ -10,7 +10,7 @@
     },
     {
         "referenceNum": "2",
-        "receiverIban": "IBARO66BACX0000001234567890",
+        "receiverIban": "RO66BACX0000001234567890",
         "senderIban": "RO66BACX0000005274537285",
         "senderName": "Dorel Popescu",
         "transactionDate": "2023-05-11 22:10:35",
@@ -19,7 +19,7 @@
     },
     {
         "referenceNum": "3",
-        "receiverIban": "IBARO66BACX0000001234567890",
+        "receiverIban": "RO66BACX0000001234567890",
         "senderIban": "RO66BACX0000005274537285",
         "senderName": "Dorel Popescu",
         "transactionDate": "2023-05-11 22:10:30",

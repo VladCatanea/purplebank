@@ -4,10 +4,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.purple.spring.mybank.Constants.ADMIN;
 import static org.purple.spring.mybank.Constants.BASE_API;
 import static org.purple.spring.mybank.Constants.PASSWORD;
+import static org.purple.spring.mybank.Constants.USER;
 
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.purple.spring.mybank.account.Account;
+import org.purple.spring.mybank.transactions.ATransaction;
 import org.purple.spring.mybank.transactions.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -65,6 +68,20 @@ public class TransactionTest {
 		Transaction[] transactions = response.getBody();
 		assertThat(transactions[0].getReferenceNum()).isEqualTo("1");
 		assertThat(transactions[1].getReferenceNum()).isEqualTo("3");
+	}
+	
+	@Test 
+	void validateTransactionsTest() {
+		ResponseEntity<Account> accountResponse = restTemplate.withBasicAuth(USER, PASSWORD).getForEntity(BASE_API + "/account/RO66BACX0000001234567890", Account.class);
+		assertThat(accountResponse.getStatusCode()).isEqualTo(HttpStatus.FOUND);
+		Long oldAmount = accountResponse.getBody().getAmount();
+		ResponseEntity<Integer> uploadResponse = uploadTransactions("transactions_test_files/transactions.json");
+		assertThat(uploadResponse.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+		ResponseEntity<ATransaction[]> response = restTemplate.withBasicAuth(USER, PASSWORD).getForEntity(BASE_API + "/accountTransaction/RO66BACX0000001234567890", ATransaction[].class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FOUND);
+		accountResponse = restTemplate.withBasicAuth(USER, PASSWORD).getForEntity(BASE_API + "/account/RO66BACX0000001234567890", Account.class);
+		assertThat(accountResponse.getStatusCode()).isEqualTo(HttpStatus.FOUND);
+		assertThat(accountResponse.getBody().getAmount()).isEqualTo(oldAmount + 200L);
 	}
 	
 }
