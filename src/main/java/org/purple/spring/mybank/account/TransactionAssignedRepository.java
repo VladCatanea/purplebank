@@ -1,4 +1,4 @@
-package org.purple.spring.mybank.transactions;
+package org.purple.spring.mybank.account;
 
 import java.util.List;
 

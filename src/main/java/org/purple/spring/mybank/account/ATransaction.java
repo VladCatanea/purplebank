@@ -1,13 +1,10 @@
-package org.purple.spring.mybank.transactions;
+package org.purple.spring.mybank.account;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Locale;
 import java.util.Objects;
-import java.util.TimeZone;
 
-import org.purple.spring.mybank.errors.TransactionException;
+import org.purple.spring.mybank.transactions.Transaction;
+import org.purple.spring.mybank.util.Utils;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -36,17 +33,7 @@ public class ATransaction {
 		this.senderName = t.getSenderIban();
 		this.debitAmount = t.getDebitAmount();
 		this.creditAmount = t.getCreditAmount();
-		// this.transactionDate = 
-		String date = t.getTransactionDate();
-		Calendar cal = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-		try{
-			cal.setTime(sdf.parse(date));
-		}catch(ParseException e) {
-			throw new TransactionException("Calendar Parse Error", e);
-		}
-		this.transactionDate = cal;
+		this.transactionDate = Utils.stringToCal(t.getTransactionDate());
 	}
 
 	public ATransaction(String referenceNum, String receiverIban, String senderIban, String senderName,

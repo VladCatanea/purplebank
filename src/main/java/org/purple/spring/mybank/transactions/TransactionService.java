@@ -6,8 +6,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 
+import org.purple.spring.mybank.account.ATransaction;
 import org.purple.spring.mybank.account.Account;
 import org.purple.spring.mybank.account.AccountRepository;
+import org.purple.spring.mybank.account.TransactionAssignedRepository;
 import org.purple.spring.mybank.errors.EntityNotFoundException;
 import org.purple.spring.mybank.errors.TransactionException;
 import org.slf4j.Logger;
@@ -37,6 +39,22 @@ public class TransactionService {
 	@Autowired
 	private TransactionAssignedRepository transactionAssignedRepository;
 
+	public void processTransaction(Transaction transaction, int transactionNo) {
+		String reference = transaction.getReferenceNum();
+		// don't reprocess duplicate transactions
+		if(transactionHistoryRepository.findById(reference).isPresent()) {
+			return;
+		}
+		transaction.setStatus("UNASSIGNED");
+		transactionHistoryRepository.save(transaction);
+		logger.debug("Transaction number {} saved: {}", transactionNo, transaction);
+		final String status = validateTransaction(transaction);
+		transactionHistoryRepository.findById(reference).map(updatedTransaction -> {
+			updatedTransaction.setStatus(status);
+			return transactionHistoryRepository.save(updatedTransaction);
+		}).orElseThrow(() -> new EntityNotFoundException(reference, "transaction"));
+	}
+	
 	public String validateTransaction(Transaction transaction) {
 		if(!accountRepository.findById(transaction.getReceiverIban()).isPresent()) {
 			return "ERROR";
@@ -44,7 +62,7 @@ public class TransactionService {
 		Account account = accountRepository.findById(transaction.getReceiverIban()).get();
 		Long newAmount = account.getAmount() + transaction.getDebitAmount() - transaction.getCreditAmount();
 		if (newAmount < 0) {
-			return "Error";
+			return "Insuficient Funds";
 		}
 		account.setAmount(newAmount);
 		accountRepository.save(account);
@@ -71,14 +89,7 @@ public class TransactionService {
 					});
 			int transactionNo = 0;
 			for (Transaction transaction : transactionList) {
-				transaction.setStatus("UNASSIGNED");
-				logger.debug("Transaction number {} saved: {}", transactionNo, transaction);
-				transactionHistoryRepository.save(transaction);
-				final String status = validateTransaction(transaction);
-				transactionHistoryRepository.findById(transaction.getReferenceNum()).map(updatedTransaction -> {
-					updatedTransaction.setStatus(status);
-					return transactionHistoryRepository.save(updatedTransaction);
-				}).orElseThrow(() -> new EntityNotFoundException(transaction.getReferenceNum(), "transaction"));
+				processTransaction(transaction, transactionNo);
 				transactionNo++;
 			}
 			return transactionNo;
@@ -100,14 +111,7 @@ public class TransactionService {
 				Transaction transaction;
 				int transactionNo = 0;
 				while ((transaction = beanReader.read(Transaction.class, headers, processors)) != null) {
-					transactionHistoryRepository.save(transaction);
-					logger.debug("Transaction number {} saved: {}", transactionNo, transaction);
-					final String status = validateTransaction(transaction);
-					final String reference = transaction.getReferenceNum();
-					transactionHistoryRepository.findById(reference).map(updatedTransaction -> {
-						updatedTransaction.setStatus(status);
-						return transactionHistoryRepository.save(updatedTransaction);
-					}).orElseThrow(() -> new EntityNotFoundException(reference, "transaction"));
+					processTransaction(transaction, transactionNo);
 					transactionNo++;
 				}
 				return transactionNo;

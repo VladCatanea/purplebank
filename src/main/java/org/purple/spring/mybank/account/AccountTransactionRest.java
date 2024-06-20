@@ -1,14 +1,11 @@
-package org.purple.spring.mybank;
+package org.purple.spring.mybank.account;
 
 
 import static org.purple.spring.mybank.Constants.BASE_API;
 
 import java.util.List;
 
-import org.purple.spring.mybank.account.AccountRepository;
 import org.purple.spring.mybank.errors.EntityNotFoundException;
-import org.purple.spring.mybank.transactions.ATransaction;
-import org.purple.spring.mybank.transactions.TransactionAssignedRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
