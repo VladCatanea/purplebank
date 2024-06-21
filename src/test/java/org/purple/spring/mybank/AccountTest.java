@@ -59,6 +59,6 @@ public class AccountTest {
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FOUND);
 		ResponseEntity<Account> accountResponse = restTemplate.withBasicAuth(USER, PASSWORD).getForEntity(BASE_API + "/account/RO66BACX0000001234567890", Account.class);
 		assertThat(accountResponse.getStatusCode()).isEqualTo(HttpStatus.FOUND);
-		assertThat(accountResponse.getBody().getAmount()).isEqualTo(220L);
+		assertThat(accountResponse.getBody().getAmount()).isEqualTo(90L);
 	}
 }

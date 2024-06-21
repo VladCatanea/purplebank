@@ -1,7 +1,9 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Table } from 'reactstrap'
 
 const AccountsTable = (props) => {
+	let navigate = useNavigate()
 	return(
 	<Table className="mt-4">
 		<thead>
@@ -14,6 +16,7 @@ const AccountsTable = (props) => {
 				<th width="15%">Address</th>
 				<th width="10%">Phone Number</th>
 				<th width="10%">Creation Date</th>
+				<th>Actions</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -27,6 +30,7 @@ const AccountsTable = (props) => {
 					<td>{account.address}</td>
 					<td>{account.phone}</td>
 					<td>{account.creationDate.split('T')[0]}</td>
+					<td><button className="button edit" size="sm" onClick={() => navigate(`/account/${account.iban}`)}>View Transactions</button></td>
 				</tr>
 			))}
 		</tbody>

@@ -10,6 +10,7 @@ import SavingsList from "../savings/SavingsList"
 import AccountsList from "../account/AccountList"
 import TransactionUpload from "../transactions/TransactionUpload"
 import TransactionHistory from "../transactions/TransactionHistory"
+import TransactionList from "../account/TransactionList"
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
         <Route path='/accounts' exact={true} element={<AccountsList/>}/>
         <Route path='/transactions' exact={true} element={<TransactionUpload/>}/>
         <Route path='/transaction/history' exact={true} element={<TransactionHistory/>}/>
+        <Route path='/account/:iban' element={<TransactionList/>}/>
       </Routes>
     </Router>
   )

@@ -30,7 +30,7 @@ public class ATransaction {
 		this.referenceNum = t.getReferenceNum();
 		this.receiverIban = t.getReceiverIban();
 		this.senderIban = t.getSenderIban();
-		this.senderName = t.getSenderIban();
+		this.senderName = t.getSenderName();
 		this.debitAmount = t.getDebitAmount();
 		this.creditAmount = t.getCreditAmount();
 		this.transactionDate = Utils.stringToCal(t.getTransactionDate());

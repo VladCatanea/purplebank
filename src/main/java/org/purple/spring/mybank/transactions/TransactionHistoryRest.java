@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -55,9 +56,19 @@ public class TransactionHistoryRest {
 	@Secured("ROLE_ADMIN")
 	@GetMapping
 	public ResponseEntity<List<Transaction>> getTransationHistory() {
+		return getTransactionHistoryPage(10, 0);
+	}
+	
+	@Secured("ROLE_ADMIN")
+	@GetMapping("/{itemsPerPage}/{page}")
+	public ResponseEntity<List<Transaction>> getTransationHistoryChosenPage(@PathVariable int itemsPerPage, @PathVariable int page) {
+		return getTransactionHistoryPage(itemsPerPage, page);
+	}
+	
+	private ResponseEntity<List<Transaction>> getTransactionHistoryPage(int itemsPerPage, int page){
 		List<Transaction> transactionList = transactionHistoryRepository
-				.findAllByOrderByTransactionDateAsc(PageRequest.of(0, 2));
-		logger.debug("Returning list of all transactions: {}", transactionList);
+				.findAllByOrderByTransactionDateAsc(PageRequest.of(page, itemsPerPage));
+		logger.debug("Returning list of transactions (page: {}, items per page: {}): {}", page, itemsPerPage, transactionList);
 		return new ResponseEntity<>(transactionList, HttpStatus.FOUND);
 	}
 

@@ -14,6 +14,7 @@ const TransactionHistoryTable = (props) => {
                 <th width="10%">Authorization Code</th>
                 <th width="10%">Debit Amount</th>
                 <th width="10%">Credit Amount</th>
+				<th width="10%">Status</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -27,6 +28,7 @@ const TransactionHistoryTable = (props) => {
                     <td>{transaction.authorizationCode}</td>
                     <td>{transaction.debitAmount}</td>
                     <td>{transaction.creditAmount}</td>
+					<td>{transaction.status}</td>
 				</tr>
 			))}
 		</tbody>
