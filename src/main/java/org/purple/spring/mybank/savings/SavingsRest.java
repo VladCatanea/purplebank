@@ -5,6 +5,8 @@ import static org.purple.spring.mybank.Constants.BASE_API;
 import java.util.Calendar;
 import java.util.List;
 
+import org.purple.spring.mybank.account.Account;
+import org.purple.spring.mybank.account.AccountRepository;
 import org.purple.spring.mybank.deposit.Deposit;
 import org.purple.spring.mybank.deposit.DepositRepository;
 import org.purple.spring.mybank.errors.EntityNotFoundException;
@@ -27,11 +29,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class SavingsRest {
 	private final SavingsRepository savingsRepository;
 	private final DepositRepository depositRepository;
+	private final AccountRepository accountRepository;
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
-	public SavingsRest(SavingsRepository savingsRepository, DepositRepository depositRepository) {
+	public SavingsRest(SavingsRepository savingsRepository, DepositRepository depositRepository, AccountRepository accountRepository) {
 		this.savingsRepository = savingsRepository;
 		this.depositRepository = depositRepository;
+		this.accountRepository = accountRepository;
 	}
 
 	@GetMapping
@@ -60,13 +64,21 @@ public class SavingsRest {
 		return new ResponseEntity<>(savings, HttpStatus.FOUND);
 	}
 
-	@PostMapping
-	public ResponseEntity<Long> createSavings(@RequestBody Savings savings, Authentication authentication) {
+	@PostMapping("/{iban}")
+	public ResponseEntity<Long> createSavings(@RequestBody Savings savings, @PathVariable String iban, Authentication authentication) {
 		logger.debug("User {} attempts to create deposit", authentication.getName());
 		savings.setOwner(authentication.getName());
 		Long depositId = savings.getDepositId();
 		Deposit deposit = depositRepository.findById(savings.getDepositId())
 				.orElseThrow(() -> new EntityNotFoundException(depositId, "deposit"));
+		Account account = accountRepository.findById(iban)
+				.orElseThrow(() -> new EntityNotFoundException(iban, "account"));
+		if (savings.getAmount() > account.getAmount()) {
+			logger.debug("Insufficient funds to open savings {} from account {}", savings, iban);
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+		account.setAmount(account.getAmount() - savings.getAmount());
+		accountRepository.save(account);
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.DATE, (int) (long) deposit.getDuration());
 		savings.setExpiration(calendar);

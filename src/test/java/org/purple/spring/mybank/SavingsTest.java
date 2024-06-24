@@ -23,9 +23,11 @@ public class SavingsTest {
 	@Autowired
 	private TestRestTemplate restTemplate;
 	
+	private String iban = "RO66BACX0000005274537285"; // iban of one USER account for testing 
+	
 	private Long createSavings(Savings savings) {
 		ResponseEntity<Long> responseEntityConfirm = restTemplate.withBasicAuth(USER, PASSWORD)
-				.postForEntity("/api/savings", savings, Long.class);
+				.postForEntity("/api/savings/" + iban, savings, Long.class);
 		assertThat(responseEntityConfirm.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 		Long id = responseEntityConfirm.getBody();
 		return id;
@@ -62,9 +64,9 @@ public class SavingsTest {
 
 	@Test
 	void checkCreate() throws Exception {
-		Savings savings = new Savings(2L, 40L, ADMIN, null);
+		Savings savings = new Savings(2L, 10L, ADMIN, null);
 		ResponseEntity<Long> responseEntityConfirm = restTemplate.withBasicAuth(USER, PASSWORD)
-				.postForEntity("/api/savings", savings, Long.class);
+				.postForEntity("/api/savings/" + iban, savings, Long.class);
 		assertThat(responseEntityConfirm.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 		Long id = responseEntityConfirm.getBody();
 		savings.setId(id);
@@ -72,12 +74,12 @@ public class SavingsTest {
 		ResponseEntity<Savings> responseEntity = restTemplate.withBasicAuth(USER, PASSWORD)
 				.getForEntity("/api/savings/" + id, Savings.class);
 		assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.FOUND);
-		assertThat(responseEntity.getBody().getAmount()).isEqualTo(40L);
+		assertThat(responseEntity.getBody().getAmount()).isEqualTo(10L);
 	}
 	
 	@Test
 	void checkEdit() throws Exception {
-		Savings savings = new Savings(1L, 100L, USER, null);
+		Savings savings = new Savings(1L, 20L, USER, null);
 		Long id = createSavings(savings);
 		savings.setId(id);
 		savings.setAmount(100000L);
@@ -90,7 +92,7 @@ public class SavingsTest {
 
 	@Test
 	void checkDelete() throws Exception {
-		Savings savings = new Savings(1L, 50L, USER, null);
+		Savings savings = new Savings(1L, 15L, USER, null);
 		Long id = createSavings(savings);
 		savings.setId(id);
 		restTemplate.withBasicAuth(USER, PASSWORD).delete("/api/savings/" + id);
