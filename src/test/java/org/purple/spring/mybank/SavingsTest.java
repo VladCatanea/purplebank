@@ -27,7 +27,7 @@ public class SavingsTest {
 	
 	private Long createSavings(Savings savings) {
 		ResponseEntity<Long> responseEntityConfirm = restTemplate.withBasicAuth(USER, PASSWORD)
-				.postForEntity("/api/savings/" + iban, savings, Long.class);
+				.postForEntity("/api/savings?iban=" + iban, savings, Long.class);
 		assertThat(responseEntityConfirm.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 		Long id = responseEntityConfirm.getBody();
 		return id;
@@ -64,9 +64,9 @@ public class SavingsTest {
 
 	@Test
 	void checkCreate() throws Exception {
-		Savings savings = new Savings(2L, 10L, ADMIN, null);
+		Savings savings = new Savings(1L, 10L, ADMIN, null);
 		ResponseEntity<Long> responseEntityConfirm = restTemplate.withBasicAuth(USER, PASSWORD)
-				.postForEntity("/api/savings/" + iban, savings, Long.class);
+				.postForEntity("/api/savings?iban=" + iban, savings, Long.class);
 		assertThat(responseEntityConfirm.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 		Long id = responseEntityConfirm.getBody();
 		savings.setId(id);

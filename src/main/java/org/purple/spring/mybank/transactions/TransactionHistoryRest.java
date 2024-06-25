@@ -37,7 +37,7 @@ public class TransactionHistoryRest {
 	@Secured("ROLE_ADMIN")
 	@PostMapping
 	public ResponseEntity<Integer> handleFileUpload(@RequestParam("file") MultipartFile file) {
-		logger.debug("Uploading file");
+		logger.debug("Uploading file {}", file.getOriginalFilename());
 		String extension = Utils.getFileExtension(file.getOriginalFilename());
 		Integer transactionsProcessed;
 		if (extension.equals(".json")) {

@@ -72,19 +72,9 @@ public class TransactionService {
 
 	public int processJSON(MultipartFile file) {
 		try (InputStream inputStream = file.getInputStream()) {
-			// read from inputStream
-			BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
-			StringBuilder sb = new StringBuilder();
-			String s;
-			while ((s = in.readLine()) != null) {
-				sb.append(s);
-				sb.append('\n');
-			}
-			in.close();
-
 			// process JSON
 			ObjectMapper objectMapper = new ObjectMapper();
-			List<Transaction> transactionList = objectMapper.readValue(sb.toString(),
+			List<Transaction> transactionList = objectMapper.readValue(inputStream,
 					new TypeReference<List<Transaction>>() {
 					});
 			int transactionNo = 0;

@@ -39,6 +39,6 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler{
 	{
 		logger.error("Transaction exception: ", ex);
         return handleExceptionInternal(ex, null, 
-          new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+          new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 }

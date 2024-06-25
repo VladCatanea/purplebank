@@ -10,6 +10,7 @@ import org.purple.spring.mybank.account.AccountRepository;
 import org.purple.spring.mybank.deposit.Deposit;
 import org.purple.spring.mybank.deposit.DepositRepository;
 import org.purple.spring.mybank.errors.EntityNotFoundException;
+import org.purple.spring.mybank.errors.TransactionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -64,8 +66,8 @@ public class SavingsRest {
 		return new ResponseEntity<>(savings, HttpStatus.FOUND);
 	}
 
-	@PostMapping("/{iban}")
-	public ResponseEntity<Long> createSavings(@RequestBody Savings savings, @PathVariable String iban, Authentication authentication) {
+	@PostMapping
+	public ResponseEntity<Long> createSavings(@RequestBody Savings savings, @RequestParam String iban, Authentication authentication) {
 		logger.debug("User {} attempts to create deposit", authentication.getName());
 		savings.setOwner(authentication.getName());
 		Long depositId = savings.getDepositId();
@@ -74,8 +76,10 @@ public class SavingsRest {
 		Account account = accountRepository.findById(iban)
 				.orElseThrow(() -> new EntityNotFoundException(iban, "account"));
 		if (savings.getAmount() > account.getAmount()) {
-			logger.debug("Insufficient funds to open savings {} from account {}", savings, iban);
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+			throw new TransactionException("Insufficient funds to open savings " + savings + " from account " + iban);
+		}
+		if (!deposit.getCurrency().equals(account.getCurrency())) {
+			throw new TransactionException("Currency mismatch between savings " + savings + "of type " + deposit + " and account " + iban);
 		}
 		account.setAmount(account.getAmount() - savings.getAmount());
 		accountRepository.save(account);
