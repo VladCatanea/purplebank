@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import AppNavbar from '../app/AppNavbar'
 import "../app/App.css"
-import { Button, Container, Form, Input, Label, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem  } from 'reactstrap'
+import { Button, Container, Form, Input, Label, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap'
 import { useNavigate, useParams } from 'react-router-dom'
 
 
@@ -33,11 +33,11 @@ const CreateSavings = () => {
     useEffect(() => {
         setLoading(true);
         fetch('/api/account', { method: 'GET' })
-        .then(response => response.json())
-        .then(result => {
-            setAccounts(result)
-            setLoading(false)
-        })
+            .then(response => response.json())
+            .then(result => {
+                setAccounts(result)
+                setLoading(false)
+            })
     }, [])
 
     if (loading) {
@@ -71,7 +71,7 @@ const CreateSavings = () => {
 
     const changeValue = (e) => {
         setIban(e.currentTarget.textContent)
-      }
+    }
 
     return (
         <div>
@@ -113,8 +113,12 @@ const CreateSavings = () => {
                             {iban}
                         </DropdownToggle>
                         <DropdownMenu>
-                            {accounts.map(account => (<DropdownItem onClick={changeValue}>{account.iban}</DropdownItem>))}
-                            
+                            {accounts.map(account => {
+                                account.currency === deposit.currency ?
+                                    (<DropdownItem onClick={changeValue}>{account.iban}</DropdownItem>) :
+                                    (<DropdownItem onClick={changeValue}>currency mismatch</DropdownItem>)
+                            })}
+
                         </DropdownMenu>
                     </ButtonDropdown>
 
