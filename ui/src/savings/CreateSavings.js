@@ -113,11 +113,11 @@ const CreateSavings = () => {
                             {iban}
                         </DropdownToggle>
                         <DropdownMenu>
-                            {accounts.map(account => {
+                            {accounts.map(account => 
                                 account.currency === deposit.currency ?
-                                    (<DropdownItem onClick={changeValue}>{account.iban}</DropdownItem>) :
-                                    (<DropdownItem onClick={changeValue}>currency mismatch</DropdownItem>)
-                            })}
+                                    <DropdownItem onClick={changeValue}>{account.iban}</DropdownItem> :
+                                    null
+                            )}
 
                         </DropdownMenu>
                     </ButtonDropdown>

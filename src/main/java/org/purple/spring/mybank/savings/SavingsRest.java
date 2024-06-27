@@ -4,9 +4,12 @@ import static org.purple.spring.mybank.Constants.BASE_API;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 
+import org.purple.spring.mybank.account.ATransaction;
 import org.purple.spring.mybank.account.Account;
 import org.purple.spring.mybank.account.AccountRepository;
+import org.purple.spring.mybank.account.TransactionAssignedRepository;
 import org.purple.spring.mybank.deposit.Deposit;
 import org.purple.spring.mybank.deposit.DepositRepository;
 import org.purple.spring.mybank.errors.EntityNotFoundException;
@@ -32,12 +35,14 @@ public class SavingsRest {
 	private final SavingsRepository savingsRepository;
 	private final DepositRepository depositRepository;
 	private final AccountRepository accountRepository;
+	private final TransactionAssignedRepository transactionRepository;
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
-	public SavingsRest(SavingsRepository savingsRepository, DepositRepository depositRepository, AccountRepository accountRepository) {
+	public SavingsRest(SavingsRepository savingsRepository, DepositRepository depositRepository, AccountRepository accountRepository, TransactionAssignedRepository transactionRepository) {
 		this.savingsRepository = savingsRepository;
 		this.depositRepository = depositRepository;
 		this.accountRepository = accountRepository;
+		this.transactionRepository = transactionRepository;
 	}
 
 	@GetMapping
@@ -84,9 +89,12 @@ public class SavingsRest {
 		account.setAmount(account.getAmount() - savings.getAmount());
 		accountRepository.save(account);
 		Calendar calendar = Calendar.getInstance();
+		String referenceNum = UUID.randomUUID().toString();
+		ATransaction transaction = new ATransaction(referenceNum, iban, iban, account.getOwnerFullName(), calendar, 0L, savings.getAmount());
 		calendar.add(Calendar.DATE, (int) (long) deposit.getDuration());
 		savings.setExpiration(calendar);
 		savings = savingsRepository.save(savings);
+		transactionRepository.save(transaction);
 		logger.debug("User created savings {}", savings);
 		return new ResponseEntity<>(savings.getId(), HttpStatus.CREATED);
 	}

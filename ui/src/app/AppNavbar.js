@@ -2,11 +2,15 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
+import { Button, Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem } from 'reactstrap';
 
 const AppNavbar = () => {
 
   const [isOpen, setIsOpen] = useState(false);
+
+  const logout = async (id) => {
+    await fetch('/logout', {method: 'POST'})
+  }
 
   return (
     <Navbar color="dark" dark expand="md">
@@ -22,6 +26,9 @@ const AppNavbar = () => {
           </NavItem>
           <NavItem>
             <NavbarBrand tag={Link} to="/accounts">Accounts</NavbarBrand>
+          </NavItem>
+          <NavItem>
+            <NavbarBrand tag={Button} onClick={logout}>Logout</NavbarBrand>
           </NavItem>
         </Nav>
       </Collapse>
