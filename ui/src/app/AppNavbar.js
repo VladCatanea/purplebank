@@ -10,6 +10,7 @@ const AppNavbar = () => {
 
   const logout = async (id) => {
     await fetch('/logout', {method: 'POST'})
+    window.location.href="/"
   }
 
   return (
@@ -27,8 +28,8 @@ const AppNavbar = () => {
           <NavItem>
             <NavbarBrand tag={Link} to="/accounts">Accounts</NavbarBrand>
           </NavItem>
-          <NavItem>
-            <NavbarBrand tag={Button} onClick={logout}>Logout</NavbarBrand>
+          <NavItem onClick={logout}>
+            <NavbarBrand tag={Link}>Logout</NavbarBrand>
           </NavItem>
         </Nav>
       </Collapse>
