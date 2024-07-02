@@ -5,8 +5,8 @@
         "senderIban": "RO66BACX0000005274537285",
         "senderName": "Dorel Popescu",
         "transactionDate": "2023-05-11 22:10:21",
-        "debitAmount": 100,
-        "creditAmount": 0
+        "debitAmount": 0,
+        "creditAmount": 100
     },
     {
         "referenceNum": "2",
@@ -14,8 +14,8 @@
         "senderIban": "RO66BACX0000005274537285",
         "senderName": "Dorel Popescu",
         "transactionDate": "2023-05-11 22:10:35",
-        "debitAmount": 50,
-        "creditAmount": 1000
+        "debitAmount": 1000,
+        "creditAmount": 50
     },
     {
         "referenceNum": "3",
@@ -23,8 +23,8 @@
         "senderIban": "RO66BACX0000005274537285",
         "senderName": "Dorel Popescu",
         "transactionDate": "2023-05-11 22:10:19",
-        "debitAmount": 150,
-        "creditAmount": 0
+        "debitAmount": 0,
+        "creditAmount": 150
     },
     {
         "referenceNum": "4",
@@ -32,8 +32,8 @@
         "senderIban": "RO66BACX0000005274537285",
         "senderName": "Dorel Popescu",
         "transactionDate": "2023-05-11 22:15:20",
-        "debitAmount": 0,
-        "creditAmount": 100
+        "debitAmount": 100,
+        "creditAmount": 0
     },
     {
         "referenceNum": "5",
@@ -41,7 +41,7 @@
         "senderIban": "RO66BACX0000005274537285",
         "senderName": "Dorel Popescu",
         "transactionDate": "2023-05-11 22:11:30",
-        "debitAmount": 20,
-        "creditAmount": 0
+        "debitAmount": 0,
+        "creditAmount": 20
     }
 ]

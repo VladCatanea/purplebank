@@ -60,7 +60,7 @@ public class TransactionService {
 			return "ERROR";
 		}
 		Account account = accountRepository.findById(transaction.getReceiverIban()).get();
-		Long newAmount = account.getAmount() + transaction.getDebitAmount() - transaction.getCreditAmount();
+		Long newAmount = account.getAmount() - transaction.getDebitAmount() + transaction.getCreditAmount();
 		if (newAmount < 0) {
 			return "Insufficient Funds";
 		}

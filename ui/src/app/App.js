@@ -11,8 +11,21 @@ import AccountsList from "../account/AccountList"
 import TransactionUpload from "../transactions/TransactionUpload"
 import TransactionHistory from "../transactions/TransactionHistory"
 import TransactionList from "../account/TransactionList"
+import Login from "./Login"
+import { useCookies } from 'react-cookie';
 
 const App = () => {
+  const [cookies, setCookie, removeCookie] = useCookies(['loggedIn']);
+
+  console.log(cookies)
+  console.log(cookies.loggedIn)
+  
+  if (!cookies.loggedIn || cookies.loggedIn === "false"){
+    return (
+      <Login />
+    )
+  }
+
   return (
     <Router>
       <Routes>

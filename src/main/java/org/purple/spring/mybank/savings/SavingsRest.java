@@ -90,7 +90,7 @@ public class SavingsRest {
 		accountRepository.save(account);
 		Calendar calendar = Calendar.getInstance();
 		String referenceNum = UUID.randomUUID().toString();
-		ATransaction transaction = new ATransaction(referenceNum, iban, iban, account.getOwnerFullName(), calendar, 0L, savings.getAmount());
+		ATransaction transaction = new ATransaction(referenceNum, iban, iban, account.getOwnerFullName(), calendar, savings.getAmount(), 0L);
 		calendar.add(Calendar.DATE, (int) (long) deposit.getDuration());
 		savings.setExpiration(calendar);
 		savings = savingsRepository.save(savings);

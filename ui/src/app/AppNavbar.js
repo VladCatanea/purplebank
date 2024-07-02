@@ -2,15 +2,18 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem } from 'reactstrap';
+import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem } from 'reactstrap';
+import { useCookies } from 'react-cookie';
 
 const AppNavbar = () => {
 
   const [isOpen, setIsOpen] = useState(false);
+  const[cookies, setCookie, removeCookie] = useCookies(["loggedIn"])
 
   const logout = async (id) => {
     await fetch('/logout', {method: 'POST'})
     window.location.href="/"
+    setCookie("loggedIn", false)
   }
 
   return (
