@@ -21,14 +21,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class AccountRest {
 
 	@Autowired
-	AccountRepository accountRepository;
+	private AccountRepository accountRepository;
 
-	private Logger logger = LoggerFactory.getLogger(getClass());
+	private static final Logger logger = LoggerFactory.getLogger(AccountRest.class);
 
 	@GetMapping
 	public ResponseEntity<List<Account>> getAccountInfo(Authentication authentication) {
 		List<Account> accountList = accountRepository.findByOwner(authentication.getName());
-		logger.debug("Returning account list: {}", accountList);
+		logger.debug("Returning account list for user {}: {}", authentication.getName(), accountList);
 		return new ResponseEntity<>(accountList, HttpStatus.FOUND);
 	}
 
@@ -36,7 +36,7 @@ public class AccountRest {
 	public ResponseEntity<Account> getOneAccountInfo(@PathVariable String iban, Authentication authentication) {
 		Account account = accountRepository.findByIbanAndOwner(iban, authentication.getName())
 				.orElseThrow(() -> new EntityNotFoundException(iban, "account"));
-		logger.debug("Returning account: {}", account);
+		logger.debug("Returning account for user {}: {}", authentication.getName(), account);
 		return new ResponseEntity<>(account, HttpStatus.FOUND);
 	}
 }

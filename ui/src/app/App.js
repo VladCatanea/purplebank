@@ -15,10 +15,7 @@ import Login from "./Login"
 import { useCookies } from 'react-cookie';
 
 const App = () => {
-  const [cookies, setCookie, removeCookie] = useCookies(['loggedIn']);
-
-  console.log(cookies)
-  console.log(cookies.loggedIn)
+  const [cookies] = useCookies(['loggedIn']);
   
   if (!cookies.loggedIn || cookies.loggedIn === "false"){
     return (

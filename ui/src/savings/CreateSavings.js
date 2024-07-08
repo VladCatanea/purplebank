@@ -19,6 +19,7 @@ const CreateSavings = () => {
     const [iban, setIban] = useState('Select account')
     const [accounts, setAccounts] = useState([])
     const navigate = useNavigate()
+    const [message, setMessage] = useState("")
 
     useEffect(() => {
         setLoading(true);
@@ -52,17 +53,30 @@ const CreateSavings = () => {
 
     const submitForm = async (event) => {
         event.preventDefault()
-
-        await fetch(`/api/savings?iban=${iban}`, {
+        var response
+try{
+        response = await fetch(`/api/savings?iban=${iban}`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(savings)
-        })
+        })}
+        catch (error){
+            console.log(error)
+        }
+
+
+    if (response?.ok) {
+        
         setSavings(initialSavingsState)
         navigate("/savings");
+    } else {
+        setMessage("Insuficient funds")
+    }
+
+        
     }
 
     const toggle = () => {
@@ -126,6 +140,7 @@ const CreateSavings = () => {
 
                     <Button color="primary" onClick={submitForm}>Create Savings</Button>
                 </Form>
+                {message}
             </Container>
         </div>
     )

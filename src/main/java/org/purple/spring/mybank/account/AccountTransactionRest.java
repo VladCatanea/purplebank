@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(BASE_API + "/accountTransaction")
 public class AccountTransactionRest {
-	private Logger logger = LoggerFactory.getLogger(getClass());
+	private static final Logger logger = LoggerFactory.getLogger(AccountTransactionRest.class);
 	private TransactionAssignedRepository transactionsRepository;
 	private AccountRepository accountRepository;
 	
@@ -34,7 +34,7 @@ public class AccountTransactionRest {
 		logger.debug("Searching transaction list for username {} and account {}", username, receiverIban);
 		accountRepository.findByIbanAndOwner(receiverIban, username).orElseThrow(() -> new EntityNotFoundException(receiverIban, "Account"));
 		List<ATransaction> transactionList = transactionsRepository.findByReceiverIban(receiverIban);
-		logger.debug("Returning transaction list: {}", transactionList);
+		logger.debug("Returning transaction list for user: {}", username, transactionList);
 		return new ResponseEntity<>(transactionList, HttpStatus.FOUND);
 	}
 }

@@ -29,30 +29,7 @@ public class Savings {
 		this.expiration = expiration;
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(amount, depositId, expiration, id, owner);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Savings other = (Savings) obj;
-		return Objects.equals(amount, other.amount) && Objects.equals(depositId, other.depositId)
-				&& Objects.equals(expiration, other.expiration) && Objects.equals(id, other.id)
-				&& Objects.equals(owner, other.owner);
-	}
-
-	@Override
-	public String toString() {
-		return "Savings [id=" + id + ", depositId=" + depositId + ", amount=" + amount + ", owner=" + owner
-				+ ", expiration=" + expiration + "]";
-	}
+	
 
 	public Long getId() {
 		return id;
@@ -92,5 +69,29 @@ public class Savings {
 
 	public void setExpiration(Calendar expiration) {
 		this.expiration = expiration;
+	}
+	@Override
+	public int hashCode() {
+		return Objects.hash(amount, depositId, expiration, id, owner);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Savings other = (Savings) obj;
+		return Objects.equals(amount, other.amount) && Objects.equals(depositId, other.depositId)
+				&& Objects.equals(expiration, other.expiration) && Objects.equals(id, other.id)
+				&& Objects.equals(owner, other.owner);
+	}
+
+	@Override
+	public String toString() {
+		return "Savings [id=" + id + ", depositId=" + depositId + ", amount=" + amount + ", owner=" + owner
+				+ ", expiration=" + expiration + "]";
 	}
 }

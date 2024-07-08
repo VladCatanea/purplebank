@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.purple.spring.mybank.deposit.Deposit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +19,8 @@ import jakarta.persistence.criteria.Root;
 @Component
 public class SavingsRepositoryImpl implements SavingsDetailsRepository {
 	@Autowired
-	EntityManager em;
+	private EntityManager em;
+	private static final Logger logger = LoggerFactory.getLogger(SavingsRepositoryImpl.class);
 	
 	public List<SavingsDetails> findDetailsByOwner(String owner){
 		CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -30,7 +33,7 @@ public class SavingsRepositoryImpl implements SavingsDetailsRepository {
 		cq.where(predicates.toArray(new Predicate[0]));
 		cq.multiselect(savings, deposit);
 		List<Tuple> result = em.createQuery(cq).getResultList();
-		System.out.println(result);
+		logger.debug("Saving details query result for owner {}: {}", owner, result);
 		List<SavingsDetails> SavingsDetailsList = result.stream().map(obj -> new SavingsDetails((Savings) obj.get(0), (Deposit) obj.get(1))).toList();
 		return SavingsDetailsList;
 	}
