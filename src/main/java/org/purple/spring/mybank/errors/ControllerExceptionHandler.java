@@ -14,13 +14,13 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler{
 	private Logger logger = LoggerFactory.getLogger(getClass());
-	
+
 	@ExceptionHandler (value = {EntityNotFoundException.class})
 	protected ResponseEntity<Object> handleEntityNotFoundError(
 		      EntityNotFoundException ex, WebRequest request)
 	{
 		logger.error("Could not find entity of type {} and id {} {}", ex.getType(), ex.getId(), ex.getStringId(), ex);
-        return handleExceptionInternal(ex, null, 
+        return handleExceptionInternal(ex, "Could not find entity of type "+ex.getType()+" and id "+ex.getId()+ex.getStringId(), 
           new HttpHeaders(), HttpStatus.NOT_FOUND, request);
 	}
 	
@@ -38,7 +38,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler{
 		      TransactionException ex, WebRequest request)
 	{
 		logger.error("Transaction exception: ", ex);
-        return handleExceptionInternal(ex, null, 
+        return handleExceptionInternal(ex, ex.getMessage(), 
           new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 }

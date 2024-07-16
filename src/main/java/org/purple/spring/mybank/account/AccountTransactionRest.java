@@ -34,7 +34,7 @@ public class AccountTransactionRest {
 		logger.debug("Searching transaction list for username {} and account {}", username, receiverIban);
 		accountRepository.findByIbanAndOwner(receiverIban, username).orElseThrow(() -> new EntityNotFoundException(receiverIban, "Account"));
 		List<ATransaction> transactionList = transactionsRepository.findByReceiverIban(receiverIban);
-		logger.debug("Returning transaction list for user: {}", username, transactionList);
+		logger.debug("Returning transaction list for user {}: {}", username, transactionList);
 		return new ResponseEntity<>(transactionList, HttpStatus.FOUND);
 	}
 }

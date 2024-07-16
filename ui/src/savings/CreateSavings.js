@@ -20,6 +20,7 @@ const CreateSavings = () => {
     const [accounts, setAccounts] = useState([])
     const navigate = useNavigate()
     const [message, setMessage] = useState("")
+    const [msg2, setMsg2] = useState("")
 
     useEffect(() => {
         setLoading(true);
@@ -53,97 +54,95 @@ const CreateSavings = () => {
 
     const submitForm = async (event) => {
         event.preventDefault()
-        var response
-try{
-        response = await fetch(`/api/savings?iban=${iban}`, {
+
+        await fetch(`/api/savings?iban=${iban}`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(savings)
-        })}
-        catch (error){
-            console.log(error)
-        }
-
-
-    if (response?.ok) {
-        
-        setSavings(initialSavingsState)
-        navigate("/savings");
-    } else {
-        setMessage("Insuficient funds")
+        }).then(res => {
+            if (!res.ok) {
+                res.text().then(text => { setMessage(text) })
+            }
+            else {
+                setSavings(initialSavingsState)
+                navigate("/savings");
+            }
+        })
+        setMsg2("Form contains errors, please correct them and retry:")
     }
 
-        
-    }
 
-    const toggle = () => {
-        setDropdownState(!dropdownState)
-    }
 
-    const changeValue = (e) => {
-        setIban(e.currentTarget.textContent)
-    }
+const toggle = () => {
+    setDropdownState(!dropdownState)
+}
 
-    return (
-        <div>
-            <AppNavbar />
-            <Container fluid>
-                <h1>Create Savings</h1>
+const changeValue = (e) => {
+    setIban(e.currentTarget.textContent)
+}
+
+return (
+    <div>
+        <AppNavbar />
+        <Container fluid>
+            <h1>Create Savings</h1>
+            <br />
+            {msg2} <br />
+            <div style={{ color: "red" }}>{message}</div>
+            <br />
+            <Form>
+                <Label>Currency</Label>
                 <br />
-                <Form>
-                    <Label>Currency</Label>
-                    <br />
-                    <Input className="w-25"
-                        type="text"
-                        name="currency"
-                        value={deposit.currency}
-                    />
-                    <br /><br />
-                    <Label>Duration (in days)</Label>
-                    <br />
-                    <Input className="w-25"
-                        type="text"
-                        name="duration"
-                        value={deposit.duration}
-                    />
-                    <br /><br />
-                    <Label>Amount</Label>
-                    <br />
-                    <Input className="w-25"
-                        type="text"
-                        name="amount"
-                        value={savings.amount}
-                        onChange={handleInputChange}
-                    />
-                    <br /><br />
+                <Input className="w-25"
+                    type="text"
+                    name="currency"
+                    value={deposit.currency}
+                />
+                <br /><br />
+                <Label>Duration (in days)</Label>
+                <br />
+                <Input className="w-25"
+                    type="text"
+                    name="duration"
+                    value={deposit.duration}
+                />
+                <br /><br />
+                <Label>Amount</Label>
+                <br />
+                <Input className="w-25"
+                    type="text"
+                    name="amount"
+                    value={savings.amount}
+                    onChange={handleInputChange}
+                />
+                <br /><br />
 
-                    <Label>Account to be credited</Label>
-                    <br />
-                    <ButtonDropdown className="w-25" isOpen={dropdownState} toggle={toggle}>
-                        <DropdownToggle caret>
-                            {iban}
-                        </DropdownToggle>
-                        <DropdownMenu>
-                            {accounts.map(account => 
-                                account.currency === deposit.currency ?
-                                    <DropdownItem onClick={changeValue}>{account.iban}</DropdownItem> :
-                                    null
-                            )}
+                <Label>Account to be credited</Label>
+                <br />
+                <ButtonDropdown className="w-25" isOpen={dropdownState} toggle={toggle}>
+                    <DropdownToggle caret>
+                        {iban}
+                    </DropdownToggle>
+                    <DropdownMenu>
+                        {accounts.map(account =>
+                            account.currency === deposit.currency ?
+                                <DropdownItem onClick={changeValue}>{account.iban}</DropdownItem> :
+                                null
+                        )}
 
-                        </DropdownMenu>
-                    </ButtonDropdown>
+                    </DropdownMenu>
+                </ButtonDropdown>
 
-                    <br /><br />
+                <br /><br />
 
-                    <Button color="primary" onClick={submitForm}>Create Savings</Button>
-                </Form>
-                {message}
-            </Container>
-        </div>
-    )
+                <Button color="primary" onClick={submitForm}>Create Savings</Button>
+            </Form>
+        </Container>
+    </div>
+)
 }
 
 export default CreateSavings;
