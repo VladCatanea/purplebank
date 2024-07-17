@@ -72,7 +72,7 @@ public class DepositTest {
 
 		restTemplate.withBasicAuth(ADMIN, PASSWORD).delete("/api/deposits/" + id);
 
-		ResponseEntity<Deposit> responseEntity = restTemplate.withBasicAuth(USER, PASSWORD).getForEntity("/api/deposits/" + id, Deposit.class);
+		ResponseEntity<Void> responseEntity = restTemplate.withBasicAuth(USER, PASSWORD).getForEntity("/api/deposits/" + id, Void.class);
 		assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 	}
 
