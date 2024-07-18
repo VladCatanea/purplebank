@@ -129,7 +129,7 @@ return (
                     <DropdownMenu>
                         {accounts.map(account =>
                             account.currency === deposit.currency ?
-                                <DropdownItem onClick={changeValue}>{account.iban}</DropdownItem> :
+                                <DropdownItem onClick={changeValue}>{account.iban} ({account.amount})</DropdownItem> :
                                 null
                         )}
 
